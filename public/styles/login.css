@@ -1,0 +1,12 @@
+form {
+        background-color: bisque;
+        border-radius: 1rem;
+        padding: 1.5rem;
+
+        width: 45vw;
+}
+
+body {
+        height: 100vh;
+        margin: 0;
+}
