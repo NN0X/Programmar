@@ -20,6 +20,7 @@ class Routing
         {
                 switch ($path)
                 {
+                        case '':
                         case 'dashboard':
                                 include 'public/views/dashboard.html';
                                 break;
