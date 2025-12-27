@@ -1,19 +1,24 @@
 <!doctype html>
 <html>
         <head>
-                <title>LOGIN</title>
+                <title>Programmar</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
                 <link rel="stylesheet" type="text/css" href="public/styles/login.css">
+                <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
                 <script src="public/scripts/login.js" defer></script>
         </head>
         <body>
                 <form onsubmit="event.preventDefault(); login();">
-                        <h1>LOGIN</h1>
-                        <input type="email" id="email" placeholder="Email">
-                        <input type="password" id="password" placeholder="Password">
-                        <button type="submit">LOGIN</button>
+                        <div class="form-logo">
+                                <?php include 'public/resources/logo.svg'; ?>
+                        </div>
+                        <h1>Welcome Back</h1>
+                        <p class="subtitle">Log in to continue your coding journey.</p>
+                        <input type="email" id="email" placeholder="Email address" required>
+                        <input type="password" id="password" placeholder="Password" required>
+                        <button type="submit">Log In</button>
                         <div class="register-link">
-                                <p>Don't have an account? <a href="/register">Register here</a></p>
+                                <p>Don't have an account? <a href="/register">Sign up</a></p>
                         </div>
                 </form>
         </body>

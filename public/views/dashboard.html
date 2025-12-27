@@ -1,12 +1,53 @@
 <!doctype html>
 <html>
         <head>
-                <title>DASHBOARD</title>
-                <link rel="stylesheet" type="text/css" href="public/styles/dashboard.css">
+                <title>Programmar</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
+                <link rel="stylesheet" type="text/css" href="public/styles/dashboard.css">
+                <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
                 <script src="public/scripts/main.js" defer></script>
         </head>
         <body>
-                <h1>DASHBOARD</h1>
+                <div class="app-container">
+                        <nav class="sidebar">
+                                <div class="logo">
+                                        <div class="logo-small">
+                                                <?php include 'public/resources/logo.svg'; ?>
+                                        </div>
+                                        Programmar
+                                </div>
+                                <ul class="nav-links">
+                                        <li><a href="#" class="active">Dashboard</a></li>
+                                        <li><a href="#">My Courses</a></li>
+                                        <li><a href="#">Challenges</a></li>
+                                        <li><a href="#">Settings</a></li>
+                                </ul>
+                        </nav>
+
+                        <main class="main-content">
+                                <header>
+                                        <h1>Keep going, <?= $username; ?>!</h1>
+                                        <p>Your coding journey is looking great. What's next?</p>
+                                </header>
+
+                                <div class="dashboard-grid">
+                                        <?php foreach ($courses as $course): ?>
+                                        <div class="card">
+                                                <div class="card-icon">
+                                                        <?= $course['icon']; ?>
+                                                </div>
+                                                <div>
+                                                        <h3><?= $course['title']; ?></h3>
+                                                        <p><?= $course['description']; ?></p>
+                                                        <div class="progress-bar">
+                                                                <div class="progress-fill" style="width: <?= $course['progress']; ?>%"></div>
+                                                        </div>
+                                                </div>
+                                                <button>Continue Learning</button>
+                                        </div>
+                                        <?php endforeach; ?>
+                                </div>
+                        </main>
+                </div>
         </body>
 </html>

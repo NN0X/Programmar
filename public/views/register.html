@@ -1,21 +1,28 @@
 <!doctype html>
 <html>
         <head>
-                <title>REGISTER</title>
+                <title>Programmar</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
                 <link rel="stylesheet" type="text/css" href="public/styles/login.css">
                 <script src="public/scripts/register.js" defer></script>
         </head>
         <body>
                 <form onsubmit="event.preventDefault(); register();">
-                        <h1>REGISTER</h1>
-                        <input type="email" id="email" placeholder="Email" required autofocus>
+
+                         <div style="width: 50px; height: 50px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                        </div>
+
+                        <h1>Create Account</h1>
+                        <p class="subtitle">Start your learning path today.</p>
+
+                        <input type="email" id="email" placeholder="Email address" required autofocus>
                         <input type="password" id="password" placeholder="Password" required>
                         <input type="password" id="confirmedPassword" placeholder="Confirm Password" required>
-                        <button type="submit">REGISTER</button>
 
-                        <div class="login-link" style="margin-top: 10px; text-align: center;">
-                                <p>Already have an account? <a href="/login">Login here</a></p>
+                        <button type="submit">Sign Up</button>
+
+                        <div class="login-link">
+                                <p>Already have an account? <a href="/login">Log In</a></p>
                         </div>
                 </form>
         </body>
