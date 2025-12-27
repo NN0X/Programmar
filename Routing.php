@@ -1,6 +1,7 @@
 <?php
 
 require_once "controllers/SecurityController.php";
+require_once "controllers/DashboardController.php";
 
 class Routing
 {
@@ -13,29 +14,55 @@ class Routing
                 "register" => [
                         "controller" => "SecurityController",
                         "action" => "register"
+                ],
+                "dashboard" => [
+                        "controller" => "DashboardController",
+                        "action" => "index"
                 ]
         ];
 
         public static function run($path)
         {
-                switch ($path)
+                $action = explode('/', $path)[0];
+                if ($action === '')
                 {
-                        case '':
-                        case 'dashboard':
-                                include 'public/views/dashboard.html';
-                                break;
-                        case 'login':
-                        case 'register':
-                                $controller = Routing::$routes[$path]["controller"];
-                                $action = Routing::$routes[$path]["action"];
-
-                                $controllerObj = new $controller;
-                                $controllerObj->$action();
-                                break;
-                        default:
-                                include 'public/views/404.html';
-                                break;
+                        $action = 'dashboard';
                 }
+
+                self::enforceAuthentication($action);
+
+                if (array_key_exists($action, Routing::$routes))
+                {
+                        $controller = Routing::$routes[$action]["controller"];
+                        $method = Routing::$routes[$action]["action"];
+
+                        $controllerObj = new $controller;
+                        $controllerObj->$method();
+                }
+                else
+                {
+                        http_response_code(404);
+                        include 'public/views/404.html';
+                }
+        }
+
+        private static function enforceAuthentication($action)
+        {
+                $publicActions = ['login', 'register'];
+                $isAuthenticated = isset($_SESSION['user']['id']);
+
+                if (!$isAuthenticated && !in_array($action, $publicActions))
+                {
+                        header('Location: /login');
+                        exit();
+                }
+
+                if ($isAuthenticated && in_array($action, $publicActions))
+                {
+                        header('Location: /dashboard');
+                        exit();
+                }
+
         }
 }
 ?>

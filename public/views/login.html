@@ -4,13 +4,17 @@
                 <title>LOGIN</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
                 <link rel="stylesheet" type="text/css" href="public/styles/login.css">
+                <script src="public/scripts/login.js" defer></script>
         </head>
         <body>
-                <form>
+                <form onsubmit="event.preventDefault(); login();">
                         <h1>LOGIN</h1>
-                        <input type="email" placeholder="Email">
-                        <input type="password" placeholder="Password">
+                        <input type="email" id="email" placeholder="Email">
+                        <input type="password" id="password" placeholder="Password">
                         <button type="submit">LOGIN</button>
+                        <div class="register-link">
+                                <p>Don't have an account? <a href="/register">Register here</a></p>
+                        </div>
                 </form>
         </body>
 </html>
