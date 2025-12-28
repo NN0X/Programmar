@@ -23,6 +23,10 @@ class Routing
                         "controller" => "CourseController",
                         "action" => "index"
                 ],
+                "my-courses" => [
+                        "controller" => "CourseController",
+                        "action" => "myCourses"
+                ],
                 "settings" => [
                         "controller" => "DashboardController",
                         "action" => "settings"
@@ -32,23 +36,19 @@ class Routing
         public static function run($path)
         {
                 $action = explode('/', $path)[0];
-                if ($action === '')
-                {
+                if ($action === '') {
                         $action = 'dashboard';
                 }
 
                 self::enforceAuthentication($action);
 
-                if (array_key_exists($action, Routing::$routes))
-                {
+                if (array_key_exists($action, Routing::$routes)) {
                         $controller = Routing::$routes[$action]["controller"];
                         $method = Routing::$routes[$action]["action"];
 
                         $controllerObj = new $controller;
                         $controllerObj->$method();
-                }
-                else
-                {
+                } else {
                         http_response_code(404);
                         include 'public/views/404.html';
                 }
@@ -59,18 +59,14 @@ class Routing
                 $publicActions = ['login', 'register'];
                 $isAuthenticated = isset($_SESSION['user']['id']);
 
-                if (!$isAuthenticated && !in_array($action, $publicActions))
-                {
+                if (!$isAuthenticated && !in_array($action, $publicActions)) {
                         header('Location: /login');
                         exit();
                 }
 
-                if ($isAuthenticated && in_array($action, $publicActions))
-                {
+                if ($isAuthenticated && in_array($action, $publicActions)) {
                         header('Location: /dashboard');
                         exit();
                 }
-
         }
 }
-?>

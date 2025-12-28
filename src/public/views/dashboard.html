@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
         <head>
-                <title>Programmar</title>
+                <title>Programmar - Dashboard</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
                 <link rel="stylesheet" type="text/css" href="public/styles/dashboard.css">
                 <script src="public/scripts/main.js" defer></script>
@@ -20,7 +20,8 @@
 
                                 <ul class="nav-links">
                                         <li><a href="/dashboard" class="active">Dashboard</a></li>
-                                        <li><a href="/courses">My Courses</a></li>
+                                        <li><a href="/my-courses">My Courses</a></li>
+                                        <li><a href="/courses">Courses</a></li>
                                         <li><a href="/settings">Settings</a></li>
                                 </ul>
                         </nav>
@@ -28,8 +29,8 @@
                         <main class="main-content">
                                 <header>
                                         <div class="header-text">
-                                                <h1>Keep going, <?= htmlspecialchars($username); ?>!</h1>
-                                                <p>Your coding journey is looking great. What's next?</p>
+                                                <h1>Welcome back, <?= htmlspecialchars($username); ?>!</h1>
+                                                <p>Ready to continue your streak?</p>
                                         </div>
 
                                         <div class="ram-container">
@@ -38,39 +39,43 @@
                                         </div>
                                 </header>
 
-                                <div class="dashboard-grid">
-                                        <?php if (empty($courses)): ?>
-                                                <div class="empty-state">
-                                                        <p>You haven't started any courses yet.</p>
-                                                </div>
-                                        <?php else: ?>
-                                                <?php foreach ($courses as $course): ?>
-                                                <div class="card">
-                                                        <div class="card-header">
-                                                                <div class="card-icon">
+                                <div class="dashboard-hero">
+                                        <?php if ($course): ?>
+                                                <div class="hero-card">
+                                                        <div class="hero-content">
+                                                                <h2>Jump back in</h2>
+                                                                <h1><?= htmlspecialchars($course['title']); ?></h1>
+                                                                <p><?= htmlspecialchars($course['description']); ?></p>
+
+                                                                <div class="hero-stats">
+                                                                        <div class="stat-box">
+                                                                                <span class="stat-label">Progress</span>
+                                                                                <span class="stat-value"><?= $course['progress']; ?>%</span>
+                                                                        </div>
+                                                                        <div class="stat-box">
+                                                                                <span class="stat-label">Lessons</span>
+                                                                                <span class="stat-value"><?= $course['completed_lessons']; ?> / <?= $course['total_lessons']; ?></span>
+                                                                        </div>
+                                                                </div>
+
+                                                                <button class="btn-large">Continue Learning</button>
+                                                        </div>
+
+                                                        <div class="progress-circle" style="--p:<?= $course['progress']; ?>">
+                                                                <div class="circle-inner">
                                                                         <?php
-                                                                                $iconMap = [
-                                                                                        'terminal' => '💻',
-                                                                                        'server' => '⚙️',
-                                                                                        'database' => '🗄️',
-                                                                                        'code' => '📝'
-                                                                                ];
+                                                                                $iconMap = ['terminal' => '💻', 'server' => '⚙️', 'database' => '🗄️', 'code' => '📝'];
                                                                                 echo $iconMap[$course['icon']] ?? '📘';
                                                                         ?>
                                                                 </div>
-                                                                <span class="lesson-count"><?= $course['completed_lessons'] ?>/<?= $course['total_lessons'] ?></span>
                                                         </div>
-
-                                                        <div class="card-body">
-                                                                <h3><?= htmlspecialchars($course['title']); ?></h3>
-                                                                <p><?= htmlspecialchars($course['description']); ?></p>
-                                                                <div class="progress-bar">
-                                                                        <div class="progress-fill" style="width: <?= $course['progress']; ?>%"></div>
-                                                                </div>
-                                                        </div>
-                                                        <button class="btn-continue">Continue</button>
                                                 </div>
-                                                <?php endforeach; ?>
+                                        <?php else: ?>
+                                                <div class="empty-state-hero">
+                                                        <h2>No active courses</h2>
+                                                        <p>Go to the Courses page to start your journey!</p>
+                                                        <a href="/courses" class="btn-continue" style="display:inline-block; width:auto;">Browse Courses</a>
+                                                </div>
                                         <?php endif; ?>
                                 </div>
                         </main>

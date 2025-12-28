@@ -1,8 +1,8 @@
 <?php
 
 require_once "AppController.php";
-require_once "repositories/CourseRepository.php";
 require_once "repositories/UserRepository.php";
+require_once "repositories/CourseRepository.php";
 
 class DashboardController extends AppController
 {
@@ -11,6 +11,7 @@ class DashboardController extends AppController
 
         public function __construct()
         {
+                parent::__construct();
                 $this->userRepository = new UserRepository();
                 $this->courseRepository = new CourseRepository();
         }
@@ -19,27 +20,22 @@ class DashboardController extends AppController
         {
                 $userId = $_SESSION['user']['id'];
                 $user = $this->userRepository->getUserById($userId);
-                $username = $user['name'] ? $user['name'] : 'Coder';
-                $ram = $user['ram'];
 
-                $courses = $this->courseRepository->getCoursesByUserId($userId);
+                $lastCourse = $this->courseRepository->getLastAccessedCourse($userId);
 
-                foreach ($courses as &$course)
-                {
-                        if ($course['total_lessons'] > 0)
-                        {
-                                $course['progress'] = round(($course['completed_lessons'] / $course['total_lessons']) * 100);
-                        }
-                        else
-                        {
-                                $course['progress'] = 0;
-                        }
+                if ($lastCourse && $lastCourse['total_lessons'] > 0) {
+                        $lastCourse['progress'] = round(($lastCourse['completed_lessons'] / $lastCourse['total_lessons']) * 100);
                 }
 
                 $this->render('dashboard', [
-                        'username' => $username,
-                        'ram' => $ram,
-                        'courses' => $courses
+                        'username' => $user['name'] ? $user['name'] : 'Coder',
+                        'ram' => $user['ram'],
+                        'course' => $lastCourse
                 ]);
+        }
+
+        public function settings()
+        {
+                $this->render('settings');
         }
 }

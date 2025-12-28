@@ -2,6 +2,10 @@
 
 class AppController
 {
+        public function __construct()
+        {
+        }
+
         protected function render(string $template = null, array $variables = [])
         {
                 $templatePath = 'public/views/'. $template.'.html';

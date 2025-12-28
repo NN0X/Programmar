@@ -11,20 +11,17 @@ class CourseController extends AppController
 
         public function __construct()
         {
+                parent::__construct();
                 $this->userRepository = new UserRepository();
                 $this->courseRepository = new CourseRepository();
         }
 
-        public function index()
-        {
+        private function getUserData() {
                 $userId = $_SESSION['user']['id'];
+                return $this->userRepository->getUserById($userId);
+        }
 
-                $user = $this->userRepository->getUserById($userId);
-                $username = $user['name'] ? $user['name'] : 'Coder';
-                $ram = $user['ram'];
-
-                $courses = $this->courseRepository->getAllCourses($userId);
-
+        private function calculateProgress(&$courses) {
                 foreach ($courses as &$course) {
                         if ($course['total_lessons'] > 0) {
                                 $course['progress'] = round(($course['completed_lessons'] / $course['total_lessons']) * 100);
@@ -32,10 +29,30 @@ class CourseController extends AppController
                                 $course['progress'] = 0;
                         }
                 }
+        }
 
-                $this->render('courses', [
-                        'username' => $username,
-                        'ram' => $ram,
+        public function index()
+        {
+                $user = $this->getUserData();
+                $courses = $this->courseRepository->getAllCourses($user['id']);
+                $this->calculateProgress($courses);
+
+                $this->render('courses_catalog', [
+                        'username' => $user['name'] ? $user['name'] : 'Coder',
+                        'ram' => $user['ram'],
+                        'courses' => $courses
+                ]);
+        }
+
+        public function myCourses()
+        {
+                $user = $this->getUserData();
+                $courses = $this->courseRepository->getCoursesByUserId($user['id']);
+                $this->calculateProgress($courses);
+
+                $this->render('my_courses', [
+                        'username' => $user['name'] ? $user['name'] : 'Coder',
+                        'ram' => $user['ram'],
                         'courses' => $courses
                 ]);
         }

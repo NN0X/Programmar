@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+        <head>
+                <title>Programmar - Catalog</title>
+                <link rel="stylesheet" type="text/css" href="public/styles/main.css">
+                <link rel="stylesheet" type="text/css" href="public/styles/dashboard.css">
+                <script src="public/scripts/main.js" defer></script>
+        </head>
+        <body>
+                <div class="app-container">
+                        <nav class="sidebar">
+                                <div class="logo">
+                                        <a href="/dashboard" class="logo-link">
+                                                <div class="logo-small">
+                                                        <?php include 'public/resources/logo.svg'; ?>
+                                                </div>
+                                                Programmar
+                                        </a>
+                                </div>
+
+                                <ul class="nav-links">
+                                        <li><a href="/dashboard">Dashboard</a></li>
+                                        <li><a href="/my-courses">My Courses</a></li>
+                                        <li><a href="/courses" class="active">Courses</a></li>
+                                        <li><a href="/settings">Settings</a></li>
+                                </ul>
+                        </nav>
+
+                        <main class="main-content">
+                                <header>
+                                        <div class="header-text">
+                                                <h1>Course Catalog</h1>
+                                                <p>Find something new to learn today.</p>
+                                        </div>
+                                        <div class="ram-container">
+                                                <span class="ram-icon">⚡</span>
+                                                <span class="ram-count"><?= $ram; ?> RAM</span>
+                                        </div>
+                                </header>
+
+                                <div class="dashboard-grid">
+                                        <?php foreach ($courses as $course): ?>
+                                        <div class="card">
+                                                <div class="card-header">
+                                                        <div class="card-icon">
+                                                                <?php
+                                                                        $iconMap = ['terminal' => '💻', 'server' => '⚙️', 'database' => '🗄️', 'code' => '📝'];
+                                                                        echo $iconMap[$course['icon']] ?? '📘';
+                                                                ?>
+                                                        </div>
+                                                        <?php 
+                                                                $isNew = (strtotime($course['created_at']) > strtotime('-30 days'));
+                                                        ?>
+                                                        <?php if($isNew): ?>
+                                                                <span class="badge-new">NEW</span>
+                                                        <?php endif; ?>
+                                                </div>
+
+                                                <div class="card-body">
+                                                        <h3><?= htmlspecialchars($course['title']); ?></h3>
+                                                        <p><?= htmlspecialchars($course['description']); ?></p>
+                                                </div>
+
+                                                <?php if($course['completed_lessons'] > 0): ?>
+                                                        <button class="btn-continue">Continue</button>
+                                                <?php else: ?>
+                                                        <button class="btn-continue" style="background-color: var(--secondary);">Start Course</button>
+                                                <?php endif; ?>
+                                        </div>
+                                        <?php endforeach; ?>
+                                </div>
+                        </main>
+                </div>
+        </body>
+</html>
