@@ -24,6 +24,7 @@
                         <p>Update your public display name.</p>
 
                         <form action="update-profile" method="POST">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <div class="form-group">
                                         <label for="name">Display Name</label>
                                         <input type="text" id="name" name="name" 

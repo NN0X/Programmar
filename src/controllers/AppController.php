@@ -27,6 +27,16 @@ class AppController
                 }
                 echo $output;
         }
+
+        protected function validateCsrf()
+        {
+                $token = $_POST['csrf_token'] ?? '';
+                if (!hash_equals($_SESSION['csrf_token'], $token))
+                {
+                        die("CSRF token validation failed.");
+                }
+        }
+
 }
 
 ?>

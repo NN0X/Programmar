@@ -109,10 +109,11 @@
                                                 <div class="sublesson-counter">
                                                         <span id="current-step">1</span>/<?= count($lesson['sublessons']) ?>
                                                 </div>
-                                                
+
                                                 <button id="btn-action" class="btn-large">Continue</button>
 
                                                 <form id="complete-form" action="/complete-lesson" method="POST" style="display:none;">
+                                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                                         <input type="hidden" name="course_id" value="<?= $_GET['id'] ?>">
                                                 </form>
                                         </div>
