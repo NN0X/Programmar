@@ -30,7 +30,7 @@ function showToast(message, type = 'success')
              container.id = 'toast-container';
              document.body.appendChild(container);
         }
-        
+
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.innerText = message;
@@ -47,12 +47,15 @@ function showToast(message, type = 'success')
 
 function loadProgress() {
         if (!courseId) return;
-        
+
         const savedSlide = sessionStorage.getItem(`lesson_progress_${courseId}`);
-        if (savedSlide !== null) {
+        if (savedSlide !== null)
+        {
                 const index = parseInt(savedSlide, 10);
-                if (index >= 0 && index < totalSlides) {
-                        for (let i = 0; i < index; i++) {
+                if (index >= 0 && index < totalSlides)
+                {
+                        for (let i = 0; i < index; i++)
+                        {
                                 const dot = document.getElementById(`dot-${i}`);
                                 if (dot) dot.classList.add('completed');
                         }
@@ -61,7 +64,8 @@ function loadProgress() {
         }
 }
 
-function saveProgress(index) {
+function saveProgress(index)
+{
         if (!courseId) return;
         sessionStorage.setItem(`lesson_progress_${courseId}`, index);
 }
@@ -76,7 +80,7 @@ function updateUI()
         if (!slide) return;
 
         slide.classList.add('active');
-        
+
         document.querySelectorAll('.progress-dot').forEach((dot, index) => {
                 dot.classList.remove('active');
                 if (index === currentSlide) dot.classList.add('active');
@@ -86,7 +90,8 @@ function updateUI()
         const btn = document.getElementById('btn-action');
         const counter = document.getElementById('current-step');
 
-        if (counter) {
+        if (counter)
+        {
                 counter.innerText = currentSlide + 1;
         }
 
@@ -177,6 +182,8 @@ function checkQuiz(slideElement, index)
                 feedback.innerText = "Correct! Well done.";
                 feedback.style.display = "block";
 
+                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
                 btn.innerText = (currentSlide === totalSlides - 1) ? "Finish Lesson" : "Continue";
                 btn.classList.remove('btn-check');
         } 
@@ -185,7 +192,9 @@ function checkQuiz(slideElement, index)
                 feedback.className = "feedback-area incorrect";
                 feedback.innerText = "Incorrect. Try again. (-1 RAM)";
                 feedback.style.display = "block";
-                
+
+                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
                 fetch('/deduct-ram', {
                         method: 'POST',
                         headers: {
