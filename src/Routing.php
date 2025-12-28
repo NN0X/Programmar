@@ -30,6 +30,18 @@ class Routing
                 "settings" => [
                         "controller" => "DashboardController",
                         "action" => "settings"
+                ],
+                "update-profile" => [
+                        "controller" => "DashboardController",
+                        "action" => "updateProfile"
+                ],
+                "reset-account" => [
+                        "controller" => "DashboardController",
+                        "action" => "resetAccount"
+                ],
+                "delete-account" => [
+                        "controller" => "DashboardController",
+                        "action" => "deleteAccount"
                 ]
         ];
 

@@ -36,6 +36,60 @@ class DashboardController extends AppController
 
         public function settings()
         {
-                $this->render('settings');
+                $userId = $_SESSION['user']['id'];
+                $user = $this->userRepository->getUserById($userId);
+
+                $this->render('settings', [
+                        'username' => $user['name']
+                ]);
+        }
+
+        public function updateProfile()
+        {
+                if (!$this->isPost()) {
+                        header("Location: /settings");
+                        return;
+                }
+
+                $userId = $_SESSION['user']['id'];
+                $name = $_POST['name'];
+
+                $this->userRepository->updateName($userId, $name);
+                header("Location: /settings");
+        }
+
+        public function resetAccount()
+        {
+                if (!$this->isPost()) {
+                        header("Location: /settings");
+                        return;
+                }
+
+                $userId = $_SESSION['user']['id'];
+                $this->userRepository->resetAccount($userId);
+
+                header("Location: /dashboard");
+        }
+
+        public function deleteAccount()
+        {
+                if (!$this->isPost()) {
+                        header("Location: /settings");
+                        return;
+                }
+
+                $userId = $_SESSION['user']['id'];
+                $this->userRepository->deleteUser($userId);
+
+                session_unset();
+                session_destroy();
+
+                header("Location: /login");
+                exit();
+        }
+
+        private function isPost(): bool
+        {
+                return $_SERVER['REQUEST_METHOD'] === 'POST';
         }
 }

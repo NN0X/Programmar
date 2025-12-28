@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Settings - Coder</title>
+        <link rel="stylesheet" href="public/styles/main.css">
+        <link rel="stylesheet" href="public/styles/settings.css">
+        <script src="public/scripts/settings.js" defer></script>
+</head>
+<body>
+        <div class="settings-container">
+                <a href="/dashboard" class="back-link">
+                        <span>←</span> Back to Dashboard
+                </a>
+
+                <div class="settings-header">
+                        <h1>Account Settings</h1>
+                </div>
+
+                <div class="settings-section">
+                        <h2>Profile Details</h2>
+                        <p>Update your public display name.</p>
+
+                        <form action="update-profile" method="POST">
+                                <div class="form-group">
+                                        <label for="name">Display Name</label>
+                                        <input type="text" id="name" name="name" 
+                                               value="<?= $username ?>" 
+                                               placeholder="Enter your name">
+                                </div>
+                                <button type="submit" style="width: auto;">Save Changes</button>
+                        </form>
+                </div>
+
+                <div class="settings-section">
+                        <h2>Reset Progress</h2>
+                        <p>This will clear all course progress. Your RAM will <strong>not</strong> be reset. This action cannot be undone.</p>
+
+                        <form id="reset-form" action="reset-account" method="POST">
+                                <button type="submit" class="btn-warning" style="width: auto;">Reset Progress</button>
+                        </form>
+                </div>
+
+                <div class="settings-section">
+                        <h2>Delete Account</h2>
+                        <p>Permanently delete your account and all associated data. You will be logged out immediately.</p>
+
+                        <form id="delete-form" action="delete-account" method="POST">
+                                <button type="submit" class="btn-danger" style="width: auto;">Delete Account</button>
+                        </form>
+                </div>
+        </div>
+</body>
+</html>
