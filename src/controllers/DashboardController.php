@@ -3,17 +3,20 @@
 require_once "AppController.php";
 require_once "repositories/UserRepository.php";
 require_once "repositories/CourseRepository.php";
+require_once "services/ContentService.php";
 
 class DashboardController extends AppController
 {
         private $userRepository;
         private $courseRepository;
+        private $contentService;
 
         public function __construct()
         {
                 parent::__construct();
                 $this->userRepository = new UserRepository();
                 $this->courseRepository = new CourseRepository();
+                $this->contentService = new ContentService();
         }
 
         public function index()
@@ -23,8 +26,19 @@ class DashboardController extends AppController
 
                 $lastCourse = $this->courseRepository->getLastAccessedCourse($userId);
 
-                if ($lastCourse && $lastCourse['total_lessons'] > 0) {
-                        $lastCourse['progress'] = round(($lastCourse['completed_lessons'] / $lastCourse['total_lessons']) * 100);
+                if ($lastCourse) {
+                        $lastCourse['total_lessons'] = 0;
+                        $lastCourse['progress'] = 0;
+
+                        $details = $this->contentService->getCourseDetails($lastCourse['id']);
+
+                        if ($details) {
+                                $lastCourse['total_lessons'] = $details['total_lessons'];
+                        }
+
+                        if ($lastCourse['total_lessons'] > 0) {
+                                $lastCourse['progress'] = round(($lastCourse['completed_lessons'] / $lastCourse['total_lessons']) * 100);
+                        }
                 }
 
                 $this->render('dashboard', [

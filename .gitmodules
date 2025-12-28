@@ -1,0 +1,3 @@
+[submodule "ProgrammarContentService"]
+	path = ProgrammarContentService
+	url = https://github.com/NN0X/programmar-content-service.git

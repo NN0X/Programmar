@@ -27,6 +27,10 @@ class Routing
                         "controller" => "CourseController",
                         "action" => "myCourses"
                 ],
+                "start-course" => [
+                        "controller" => "CourseController",
+                        "action" => "start"
+                ],
                 "settings" => [
                         "controller" => "DashboardController",
                         "action" => "settings"
