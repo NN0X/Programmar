@@ -58,194 +58,60 @@ body {
 .nav-links li a {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    color: var(--text-gray);
+    text-decoration: none;
     padding: 0.75rem 1rem;
     border-radius: var(--radius-sm);
-    color: var(--text-gray);
     transition: all 0.2s;
-    text-decoration: none;
+    font-weight: 500;
 }
 
-.nav-links li a:hover, .nav-links li a.active {
+.nav-links li a:hover,
+.nav-links li a.active {
     background-color: var(--bg-card);
     color: var(--text-white);
 }
 
+/* Sidebar Footer (Logout) */
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-gray);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.logout-link:hover {
+    color: #ef4444; /* Red color */
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Main Content */
 .main-content {
     flex: 1;
-    padding: 2.5rem;
+    padding: 2rem;
     overflow-y: auto;
 }
 
-/* Header */
 header {
-    margin-bottom: 2.5rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 2rem;
 }
 
-header h1 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-}
-
-/* RAM Indicator */
-.ram-container {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.ram-icon {
-    font-size: 1.2rem;
-    line-height: 1;
-}
-
-.ram-count {
-    color: var(--text-white);
-    font-weight: bold;
-    font-size: 0.95rem;
-}
-
-/* Grid & Cards */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-}
-
-.lesson-count {
-    font-size: 0.8rem;
-    color: var(--text-gray);
-    background: rgba(255,255,255,0.05);
-    padding: 4px 10px;
-    border-radius: 12px;
-}
-
-.card-icon {
-    width: 48px;
-    height: 48px;
-    background-color: rgba(37, 99, 235, 0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary);
-    font-size: 1.4rem;
-}
-
-.card h3 {
-    margin: 0 0 0.5rem 0;
-    color: var(--text-white);
-}
-
-.card p {
-    margin: 0 0 1.5rem 0;
-    line-height: 1.5;
-    color: var(--text-gray);
-    font-size: 0.9rem;
-}
-
-.progress-bar {
-    height: 6px;
-    background-color: #2d3748;
-    border-radius: 3px;
-    margin-bottom: 1.5rem;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background-color: var(--primary);
-    width: 0%;
-    transition: width 0.5s ease-in-out;
-}
-
-.btn-continue {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-weight: 500;
-    margin-top: auto;
-    width: 100%;
-    transition: background-color 0.2s;
-    font-size: 0.95rem;
-}
-
-.btn-continue:hover {
-    background-color: #1d4ed8;
-}
-
-.empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: var(--text-gray);
-    padding: 2rem;
-}
-
-/* New Logic Badges */
-.badge-new {
-    background-color: #10b981;
-    color: white;
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-
-/* Dashboard Hero Section */
-.hero-card {
-    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.1) 100%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-}
-
-.hero-content h2 {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: var(--text-gray);
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
-}
-
-.hero-content h1 {
+.header-text h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     color: var(--text-white);
@@ -304,15 +170,14 @@ header h1 {
 
 /* Circular Progress Visualization */
 .progress-circle {
+    position: relative;
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background: conic-gradient(var(--primary) calc(var(--p) * 1%), #2d3748 0);
+    background: conic-gradient(var(--primary) calc(var(--p) * 1%), #2e3545 0);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
 }
 
 .circle-inner {
@@ -323,5 +188,141 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 2.5rem;
+}
+
+/* RAM Counter */
+.ram-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ram-icon {
+    color: #eab308;
+}
+
+.ram-count {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(37, 99, 235, 0.1);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.lesson-count {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    background-color: var(--bg-dark);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+}
+
+.card-body {
+    flex: 1;
+    margin-bottom: 1.5rem;
+}
+
+.card-body h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: var(--bg-dark);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+.btn-continue {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.dashboard-hero {
+    margin-bottom: 3rem;
+}
+
+.hero-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-content h2 {
+    color: var(--primary);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.badge-new {
+    background-color: #10b981;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
 }

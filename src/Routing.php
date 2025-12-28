@@ -31,6 +31,10 @@ class Routing
                         "controller" => "DashboardController",
                         "action" => "settings"
                 ],
+                "logout" => [
+                        "controller" => "DashboardController",
+                        "action" => "logout"
+                ],
                 "update-profile" => [
                         "controller" => "DashboardController",
                         "action" => "updateProfile"

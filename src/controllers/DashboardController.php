@@ -88,6 +88,14 @@ class DashboardController extends AppController
                 exit();
         }
 
+        public function logout()
+        {
+                session_unset();
+                session_destroy();
+                header("Location: /login");
+                exit();
+        }
+
         private function isPost(): bool
         {
                 return $_SERVER['REQUEST_METHOD'] === 'POST';

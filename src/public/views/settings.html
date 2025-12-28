@@ -29,7 +29,7 @@
                                                value="<?= $username ?>" 
                                                placeholder="Enter your name">
                                 </div>
-                                <button type="submit" style="width: auto;">Save Changes</button>
+                                <button type="submit" class="btn-save" style="width: auto;">Save Changes</button>
                         </form>
                 </div>
 
@@ -49,6 +49,17 @@
                         <form id="delete-form" action="delete-account" method="POST">
                                 <button type="submit" class="btn-danger" style="width: auto;">Delete Account</button>
                         </form>
+                </div>
+        </div>
+
+        <div id="confirmation-modal" class="modal-overlay">
+                <div class="modal-content">
+                        <h3 id="modal-title">Confirm Action</h3>
+                        <p id="modal-message">Are you sure you want to proceed?</p>
+                        <div class="modal-actions">
+                                <button id="modal-cancel" class="btn-secondary">Cancel</button>
+                                <button id="modal-confirm" class="btn-danger">Confirm</button>
+                        </div>
                 </div>
         </div>
 </body>
