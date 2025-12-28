@@ -1,17 +1,76 @@
 let currentSlide = 0;
+let totalSlides = 0;
+let courseId = null;
 
 document.addEventListener('DOMContentLoaded', function() 
 {
+        const urlParams = new URLSearchParams(window.location.search);
+        courseId = urlParams.get('id');
+
+        const container = document.querySelector('.lesson-container');
+        if (container) {
+                totalSlides = parseInt(container.dataset.totalSlides, 10);
+        }
+
+        loadProgress();
+
         updateUI();
 
-        document.getElementById('btn-action').addEventListener('click', handleAction);
+        const btn = document.getElementById('btn-action');
+        if (btn) {
+                btn.addEventListener('click', handleAction);
+        }
 });
+
+function loadProgress() {
+        if (!courseId) return;
+
+        const savedSlide = sessionStorage.getItem(`lesson_progress_${courseId}`);
+        if (savedSlide !== null)
+        {
+                const index = parseInt(savedSlide, 10);
+                if (index >= 0 && index < totalSlides)
+                {
+                        for (let i = 0; i < index; i++)
+                        {
+                                const dot = document.getElementById(`dot-${i}`);
+                                if (dot) dot.classList.add('completed');
+                        }
+                        currentSlide = index;
+                }
+        }
+}
+
+function saveProgress(index)
+{
+        if (!courseId) return;
+        sessionStorage.setItem(`lesson_progress_${courseId}`, index);
+}
 
 function updateUI() 
 {
+        document.querySelectorAll('.sublesson-slide').forEach(slide => {
+                slide.classList.remove('active');
+        });
+
         const slide = document.getElementById(`slide-${currentSlide}`);
+        if (!slide) return;
+
+        slide.classList.add('active');
+
+        document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (index === currentSlide) dot.classList.add('active');
+        });
+
         const type = slide.dataset.type;
         const btn = document.getElementById('btn-action');
+        const counter = document.getElementById('current-step');
+
+        if (counter)
+        {
+                counter.innerText = currentSlide + 1;
+        }
 
         if (type === 'info') 
         {
@@ -43,20 +102,22 @@ function handleAction()
         } 
         else 
         {
+                if(courseId) sessionStorage.removeItem(`lesson_progress_${courseId}`);
                 document.getElementById('complete-form').submit();
         }
 }
 
 function goToNextSlide() 
 {
-        document.getElementById(`slide-${currentSlide}`).classList.remove('active');
-        document.getElementById(`dot-${currentSlide}`).classList.remove('active');
-        document.getElementById(`dot-${currentSlide}`).classList.add('completed');
+        const currentDot = document.getElementById(`dot-${currentSlide}`);
+        if(currentDot)
+        {
+                currentDot.classList.remove('active');
+                currentDot.classList.add('completed');
+        }
 
         currentSlide++;
-
-        document.getElementById(`slide-${currentSlide}`).classList.add('active');
-        document.getElementById(`dot-${currentSlide}`).classList.add('active');
+        saveProgress(currentSlide);
 
         updateUI();
 }

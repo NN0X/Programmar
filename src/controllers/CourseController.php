@@ -101,6 +101,8 @@ class CourseController extends AppController
                 $courseId = $_GET['id'];
                 $userId = $_SESSION['user']['id'];
 
+                $user = $this->userRepository->getUserById($userId);
+
                 $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
 
                 if (!$courseProgress)
@@ -122,7 +124,8 @@ class CourseController extends AppController
 
                 $this->render('lesson', [
                         'lesson' => $lessonData,
-                        'lessonNumber' => $currentLessonNum
+                        'lessonNumber' => $currentLessonNum,
+                        'ram' => $user['ram']
                 ]);
         }
 

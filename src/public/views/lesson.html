@@ -8,77 +8,117 @@
         <link rel="stylesheet" href="public/styles/dashboard.css">
         <link rel="stylesheet" href="public/styles/lesson.css">
 
-        <script>
-                const totalSlides = <?= count($lesson['sublessons']) ?>;
-        </script>
         <script src="public/scripts/lesson.js" defer></script>
 </head>
 <body>
         <div class="app-container">
-                <div style="padding: 20px;">
-                        <a href="/dashboard" class="back-link">← Quit Lesson</a>
-                </div>
-
-                <div class="lesson-container">
-                        <div class="progress-indicator">
-                                <?php foreach ($lesson['sublessons'] as $index => $sub): ?>
-                                        <div id="dot-<?= $index ?>" class="progress-dot <?= $index === 0 ? 'active' : '' ?>"></div>
-                                <?php endforeach; ?>
+                <nav class="sidebar">
+                        <div class="logo">
+                                <a href="/dashboard" class="logo-link">
+                                        <div class="logo-small">
+                                                <?php include 'public/resources/logo.svg'; ?>
+                                        </div>
+                                        Programmar
+                                </a>
                         </div>
 
-                        <div class="lesson-header">
-                                <h4>Lesson <?= $lessonNumber ?></h4>
-                                <h1><?= htmlspecialchars($lesson['title']) ?></h1>
+                        <ul class="nav-links">
+                                <li><a href="/dashboard">Dashboard</a></li>
+                                <li><a href="/my-courses" class="active">My Courses</a></li>
+                                <li><a href="/courses">Courses</a></li>
+                                <li><a href="/settings">Settings</a></li>
+                        </ul>
+
+                        <div class="sidebar-footer">
+                                <a href="/logout" class="logout-link">
+                                        <span>🚪</span> Logout
+                                </a>
                         </div>
+                </nav>
 
-                        <?php foreach ($lesson['sublessons'] as $index => $sub): ?>
-                                <div id="slide-<?= $index ?>" class="sublesson-slide <?= $index === 0 ? 'active' : '' ?>" 
-                                     data-type="<?= $sub['type'] ?>" 
-                                     data-answer="<?= isset($sub['answer']) ? addslashes($sub['answer']) : '' ?>">
-
-                                        <h2><?= htmlspecialchars($sub['title']) ?></h2>
-
-                                        <?php if ($sub['type'] === 'info'): ?>
-                                                <p class="lesson-content"><?= nl2br(htmlspecialchars($sub['content'])) ?></p>
-
-                                        <?php else: ?>
-                                                <p class="question-text"><?= htmlspecialchars($sub['question']) ?></p>
-
-                                                <div class="quiz-container">
-                                                        <?php if ($sub['type'] === 'multiple_choice'): ?>
-                                                                <?php foreach ($sub['options'] as $opt): ?>
-                                                                        <label class="option-label">
-                                                                                <input type="radio" name="q-<?= $index ?>" value="<?= htmlspecialchars($opt) ?>">
-                                                                                <?= htmlspecialchars($opt) ?>
-                                                                        </label>
-                                                                <?php endforeach; ?>
-
-                                                        <?php elseif ($sub['type'] === 'true_false'): ?>
-                                                                <label class="option-label">
-                                                                        <input type="radio" name="q-<?= $index ?>" value="true"> True
-                                                                </label>
-                                                                <label class="option-label">
-                                                                        <input type="radio" name="q-<?= $index ?>" value="false"> False
-                                                                </label>
-
-                                                        <?php elseif ($sub['type'] === 'input'): ?>
-                                                                <input type="text" id="input-<?= $index ?>" class="quiz-input" placeholder="Type your answer...">
-                                                        <?php endif; ?>
-                                                </div>
-
-                                                <div id="feedback-<?= $index ?>" class="feedback-area"></div>
-                                        <?php endif; ?>
+                <main class="main-content lesson-main">
+                        <header>
+                                <div class="header-text">
+                                        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+                                        <h1><?= htmlspecialchars($lesson['title']) ?></h1>
+                                        
+                                        <div class="lesson-meta" style="margin-top: 10px;">
+                                                <span class="lesson-badge">Lesson <?= $lessonNumber ?></span>
+                                        </div>
                                 </div>
-                        <?php endforeach; ?>
+                                
+                                <div class="ram-container">
+                                        <span class="ram-icon">⚡</span>
+                                        <span class="ram-count"><?= $ram; ?> RAM</span>
+                                </div>
+                        </header>
 
-                        <div class="footer-actions">
-                                <button id="btn-action" class="btn-large">Continue</button>
+                        <div class="lesson-wrapper">
+                                <div class="lesson-container" data-total-slides="<?= count($lesson['sublessons']) ?>">
+                                        <div class="progress-indicator">
+                                                <?php foreach ($lesson['sublessons'] as $index => $sub): ?>
+                                                        <div id="dot-<?= $index ?>" class="progress-dot <?= $index === 0 ? 'active' : '' ?>"></div>
+                                                <?php endforeach; ?>
+                                        </div>
 
-                                <form id="complete-form" action="/complete-lesson" method="POST" style="display:none;">
-                                        <input type="hidden" name="course_id" value="<?= $_GET['id'] ?>">
-                                </form>
+                                        <?php foreach ($lesson['sublessons'] as $index => $sub): ?>
+                                                <div id="slide-<?= $index ?>" class="sublesson-slide" 
+                                                     data-type="<?= $sub['type'] ?>" 
+                                                     data-answer="<?= isset($sub['answer']) ? addslashes($sub['answer']) : '' ?>">
+
+                                                        <h2><?= htmlspecialchars($sub['title']) ?></h2>
+
+                                                        <div class="slide-content-area">
+                                                                <?php if ($sub['type'] === 'info'): ?>
+                                                                        <p class="lesson-text"><?= nl2br(htmlspecialchars($sub['content'])) ?></p>
+
+                                                                <?php else: ?>
+                                                                        <p class="question-text"><?= htmlspecialchars($sub['question']) ?></p>
+
+                                                                        <div class="quiz-container">
+                                                                                <?php if ($sub['type'] === 'multiple_choice'): ?>
+                                                                                        <?php foreach ($sub['options'] as $opt): ?>
+                                                                                                <label class="option-label">
+                                                                                                        <input type="radio" name="q-<?= $index ?>" value="<?= htmlspecialchars($opt) ?>">
+                                                                                                        <span class="label-text"><?= htmlspecialchars($opt) ?></span>
+                                                                                                </label>
+                                                                                        <?php endforeach; ?>
+
+                                                                                <?php elseif ($sub['type'] === 'true_false'): ?>
+                                                                                        <label class="option-label">
+                                                                                                <input type="radio" name="q-<?= $index ?>" value="true"> 
+                                                                                                <span class="label-text">True</span>
+                                                                                        </label>
+                                                                                        <label class="option-label">
+                                                                                                <input type="radio" name="q-<?= $index ?>" value="false"> 
+                                                                                                <span class="label-text">False</span>
+                                                                                        </label>
+
+                                                                                <?php elseif ($sub['type'] === 'input'): ?>
+                                                                                        <input type="text" id="input-<?= $index ?>" class="quiz-input" placeholder="Type your answer...">
+                                                                                <?php endif; ?>
+                                                                        </div>
+
+                                                                        <div id="feedback-<?= $index ?>" class="feedback-area"></div>
+                                                                <?php endif; ?>
+                                                        </div>
+                                                </div>
+                                        <?php endforeach; ?>
+
+                                        <div class="footer-actions">
+                                                <div class="sublesson-counter">
+                                                        <span id="current-step">1</span>/<?= count($lesson['sublessons']) ?>
+                                                </div>
+                                                
+                                                <button id="btn-action" class="btn-large">Continue</button>
+
+                                                <form id="complete-form" action="/complete-lesson" method="POST" style="display:none;">
+                                                        <input type="hidden" name="course_id" value="<?= $_GET['id'] ?>">
+                                                </form>
+                                        </div>
+                                </div>
                         </div>
-                </div>
+                </main>
         </div>
 </body>
 </html>
