@@ -143,6 +143,8 @@ class CourseController extends AppController
         {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id']))
                 {
+                        $this->validateCsrf();
+
                         $courseId = $_POST['course_id'];
                         $userId = $_SESSION['user']['id'];
 
@@ -161,20 +163,35 @@ class CourseController extends AppController
                 header("Location: /dashboard");
         }
 
-        public function deductRam()
+        public function checkAnswer()
         {
-                $input = json_decode(file_get_contents('php://input'), true);
+                $this->validateCsrf();
 
-                if (!$input) {
-                    http_response_code(400);
-                    echo json_encode(['error' => 'Invalid request']);
-                    return;
+                $input = json_decode(file_get_contents('php://input'), true);
+                if (!$input)
+                {
+                        http_response_code(400);
+                        return;
                 }
 
-                $userId = $_SESSION['user']['id'];
-                $newRam = $this->userRepository->deductRam($userId);
+                $courseId = (int)$input['course_id'];
+                $lessonNum = (int)$input['lesson_num'];
+                $subIndex = (int)$input['sublesson_index'];
+                $userAnswer = $input['answer'] ?? '';
+
+                $lessonData = $this->contentService->getLesson($courseId, $lessonNum);
+                $correctAnswer = $lessonData['sublessons'][$subIndex]['answer'] ?? null;
 
                 header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'ram' => $newRam]);
+                if ($correctAnswer && strtolower(trim($userAnswer)) === strtolower(trim($correctAnswer)))
+                {
+                        echo json_encode(['success' => true, 'correct' => true]);
+                }
+                else
+                {
+                        $userId = $_SESSION['user']['id'];
+                        $newRam = $this->userRepository->deductRam($userId);
+                        echo json_encode(['success' => true, 'correct' => false, 'ram' => $newRam]);
+                }
         }
 }

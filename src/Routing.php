@@ -35,6 +35,10 @@ class Routing
                         "controller" => "CourseController",
                         "action" => "lesson"
                 ],
+                "check-answer" => [
+                        "controller" => "CourseController",
+                        "action" => "checkAnswer"
+                ],
                 "complete-lesson" => [
                         "controller" => "CourseController",
                         "action" => "completeLesson"
@@ -48,19 +52,19 @@ class Routing
                         "action" => "settings"
                 ],
                 "logout" => [
-                        "controller" => "DashboardController",
+                        "controller" => "SecurityController",
                         "action" => "logout"
                 ],
                 "update-profile" => [
-                        "controller" => "DashboardController",
+                        "controller" => "SecurityController",
                         "action" => "updateProfile"
                 ],
                 "reset-account" => [
-                        "controller" => "DashboardController",
+                        "controller" => "SecurityController",
                         "action" => "resetAccount"
                 ],
                 "delete-account" => [
-                        "controller" => "DashboardController",
+                        "controller" => "SecurityController",
                         "action" => "deleteAccount"
                 ]
         ];

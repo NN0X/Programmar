@@ -90,6 +90,74 @@ class SecurityController extends AppController
                 return $this->sendJson(['success' => true, 'message' => 'User registered successfully'], 201);
         }
 
+        public function updateProfile()
+        {
+                if (!$this->isPost()) {
+                        header("Location: /settings");
+                        return;
+                }
+
+                $this->validateCsrf();
+
+                $userId = $_SESSION['user']['id'];
+                $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+
+                $this->userRepository->updateName($userId, $name);
+                header("Location: /settings");
+        }
+
+        public function resetAccount()
+        {
+                if (!$this->isPost()) {
+                        header("Location: /settings");
+                        return;
+                }
+
+                $this->validateCsrf();
+
+                $userId = $_SESSION['user']['id'];
+                $this->userRepository->resetAccount($userId);
+
+                header("Location: /dashboard");
+        }
+
+        public function deleteAccount()
+        {
+                if (!$this->isPost()) {
+                        header("Location: /settings");
+                        return;
+                }
+
+                $this->validateCsrf();
+
+                $userId = $_SESSION['user']['id'];
+                $this->userRepository->deleteUser($userId);
+
+                session_unset();
+                session_destroy();
+
+                header("Location: /login");
+                exit();
+        }
+
+        public function logout()
+        {
+                $_SESSION = array();
+
+                if (ini_get("session.use_cookies"))
+                {
+                        $params = session_get_cookie_params();
+                        setcookie(session_name(), '', time() - 42000,
+                        $params["path"], $params["domain"],
+                        $params["secure"], $params["httponly"]
+                        );
+                }
+
+                session_destroy();
+                header("Location: /login");
+                exit();
+        }
+
         private function sendJson($data, $statusCode = 200)
         {
                 header('Content-Type: application/json');

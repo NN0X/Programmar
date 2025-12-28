@@ -40,6 +40,7 @@
                         <p>This will clear all course progress. Your RAM will <strong>not</strong> be reset. This action cannot be undone.</p>
 
                         <form id="reset-form" action="reset-account" method="POST">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <button type="submit" class="btn-warning" style="width: auto;">Reset Progress</button>
                         </form>
                 </div>
@@ -49,6 +50,7 @@
                         <p>Permanently delete your account and all associated data. You will be logged out immediately.</p>
 
                         <form id="delete-form" action="delete-account" method="POST">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <button type="submit" class="btn-danger" style="width: auto;">Delete Account</button>
                         </form>
                 </div>

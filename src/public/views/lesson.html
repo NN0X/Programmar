@@ -64,7 +64,6 @@
                                         <?php foreach ($lesson['sublessons'] as $index => $sub): ?>
                                                 <div id="slide-<?= $index ?>" class="sublesson-slide" 
                                                      data-type="<?= $sub['type'] ?>" 
-                                                     data-answer="<?= isset($sub['answer']) ? addslashes($sub['answer']) : '' ?>">
 
                                                         <h2><?= htmlspecialchars($sub['title']) ?></h2>
 

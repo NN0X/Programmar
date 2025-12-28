@@ -31,12 +31,19 @@ class AppController
         protected function validateCsrf()
         {
                 $token = $_POST['csrf_token'] ?? '';
-                if (!hash_equals($_SESSION['csrf_token'], $token))
+
+                if (empty($token))
                 {
+                        $jsonInput = json_decode(file_get_contents('php://input'), true);
+                        $token = $jsonInput['csrf_token'] ?? '';
+                }
+
+                if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token))
+                {
+                        http_response_code(403);
                         die("CSRF token validation failed.");
                 }
         }
-
 }
 
 ?>

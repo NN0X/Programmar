@@ -147,7 +147,6 @@ function goToNextSlide()
 function checkQuiz(slideElement, index) 
 {
         const type = slideElement.dataset.type;
-        const correctAnswer = slideElement.dataset.answer;
         const feedback = document.getElementById(`feedback-${index}`);
         const btn = document.getElementById('btn-action');
 
@@ -156,18 +155,12 @@ function checkQuiz(slideElement, index)
         if (type === 'input') 
         {
                 const inputEl = document.getElementById(`input-${index}`);
-                if (inputEl) 
-                {
-                        userAnswer = inputEl.value.trim();
-                }
+                if (inputEl) userAnswer = inputEl.value.trim();
         } 
         else 
         {
                 const checked = document.querySelector(`input[name="q-${index}"]:checked`);
-                if (checked) 
-                {
-                        userAnswer = checked.value;
-                }
+                if (checked) userAnswer = checked.value;
         }
 
         if (!userAnswer) 
@@ -176,50 +169,59 @@ function checkQuiz(slideElement, index)
                 return;
         }
 
-        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) 
-        {
-                feedback.className = "feedback-area correct";
-                feedback.innerText = "Correct! Well done.";
-                feedback.style.display = "block";
+        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
 
-                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                btn.innerText = (currentSlide === totalSlides - 1) ? "Finish Lesson" : "Continue";
-                btn.classList.remove('btn-check');
-        } 
-        else 
-        {
-                feedback.className = "feedback-area incorrect";
-                feedback.innerText = "Incorrect. Try again. (-1 RAM)";
-                feedback.style.display = "block";
-
-                feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                fetch('/deduct-ram', {
-                        method: 'POST',
-                        headers: {
-                                'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ action: 'wrong_answer' })
+        fetch('/check-answer', {
+                method: 'POST',
+                headers: {
+                        'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                        course_id: courseId,
+                        lesson_num: document.querySelector('.lesson-badge').innerText.match(/\d+/)[0],
+                        sublesson_index: index,
+                        answer: userAnswer,
+                        csrf_token: csrfToken
                 })
-                .then(response => response.json())
-                .then(data => {
-                        if(data.success) {
-                                const ramDisplay = document.querySelector('.ram-count');
-                                if(ramDisplay) {
-                                        ramDisplay.innerText = data.ram + ' RAM';
-                                        ramDisplay.style.color = '#ef4444';
-                                        setTimeout(() => { ramDisplay.style.color = ''; }, 500);
-                                }
-                                
-                                if (data.ram <= 0) {
-                                    showToast("System Failure: 0 RAM. Recharge required.", "error");
-                                    setTimeout(() => {
-                                        window.location.href = "/dashboard";
-                                    }, 2000);
-                                }
+        })
+        .then(response => response.json())
+        .then(data => {
+                if (data.success && data.correct) 
+                {
+                        feedback.className = "feedback-area correct";
+                        feedback.innerText = "Correct! Well done.";
+                        feedback.style.display = "block";
+                        feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                        btn.innerText = (currentSlide === totalSlides - 1) ? "Finish Lesson" : "Continue";
+                        btn.classList.remove('btn-check');
+                } 
+                else if (data.success && !data.correct)
+                {
+                        feedback.className = "feedback-area incorrect";
+                        feedback.innerText = "Incorrect. Try again. (-1 RAM)";
+                        feedback.style.display = "block";
+                        feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                        const ramDisplay = document.querySelector('.ram-count');
+                        if (ramDisplay)
+                        {
+                                ramDisplay.innerText = data.ram + ' RAM';
+                                ramDisplay.style.color = '#ef4444';
+                                setTimeout(() => { ramDisplay.style.color = ''; }, 500);
                         }
-                })
-                .catch(err => console.error("Error deducting RAM:", err));
-        }
+
+                        if (data.ram <= 0)
+                        {
+                                showToast("System Failure: 0 RAM. Recharge required.", "error");
+                                setTimeout(() => {
+                                        window.location.href = "/dashboard";
+                                }, 2000);
+                        }
+                }
+        })
+        .catch(err => {
+                console.error("Error verifying answer:", err);
+                showToast("Technical error verifying answer.", "error");
+        });
 }
