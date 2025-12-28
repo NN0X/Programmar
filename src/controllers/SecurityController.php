@@ -85,6 +85,8 @@ class SecurityController extends AppController
 
                 $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
 
+                session_regenerate_id(true);
+
                 $this->userRepository->addUser($email, $hashedPassword);
 
                 return $this->sendJson(['success' => true, 'message' => 'User registered successfully'], 201);

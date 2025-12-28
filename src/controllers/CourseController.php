@@ -113,6 +113,9 @@ class CourseController extends AppController
                 }
 
                 $courseId = (int)$_GET['id'];
+
+                $this->courseRepository->setActiveCourse($userId, $courseId);
+
                 $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
 
                 if (!$courseProgress)
@@ -130,8 +133,6 @@ class CourseController extends AppController
                         exit();
                 }
 
-                $this->courseRepository->setActiveCourse($userId, $courseId);
-
                 $this->render('lesson', [
                         'lesson' => $lessonData,
                         'lessonNumber' => $currentLessonNum,
@@ -145,8 +146,14 @@ class CourseController extends AppController
                 {
                         $this->validateCsrf();
 
-                        $courseId = $_POST['course_id'];
+                        $courseId = (int)$_POST['course_id'];
                         $userId = $_SESSION['user']['id'];
+
+                        $lastCourse = $this->courseRepository->getLastAccessedCourse($userId);
+                        if (!$lastCourse || $lastCourse['id'] !== $courseId) {
+                                header("Location: /dashboard");
+                                exit();
+                        }
 
                         $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
                         if (!$courseProgress)
@@ -175,11 +182,20 @@ class CourseController extends AppController
                 }
 
                 $courseId = (int)$input['course_id'];
-                $lessonNum = (int)$input['lesson_num'];
                 $subIndex = (int)$input['sublesson_index'];
                 $userAnswer = $input['answer'] ?? '';
 
-                $lessonData = $this->contentService->getLesson($courseId, $lessonNum);
+                $userId = $_SESSION['user']['id'];
+                $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
+
+                if (!$courseProgress) {
+                        http_response_code(403);
+                        return;
+                }
+
+                $currentLessonNum = $courseProgress['completed_lessons'] + 1;
+
+                $lessonData = $this->contentService->getLesson($courseId, $currentLessonNum);
                 $correctAnswer = $lessonData['sublessons'][$subIndex]['answer'] ?? null;
 
                 header('Content-Type: application/json');
@@ -189,9 +205,8 @@ class CourseController extends AppController
                 }
                 else
                 {
-                        $userId = $_SESSION['user']['id'];
                         $newRam = $this->userRepository->deductRam($userId);
-                        echo json_encode(['success' => true, 'correct' => false, 'ram' => $newRam]);
+                        echo json_encode(['success' => true, 'correct' => false, 'ram' => (int)$newRam]);
                 }
         }
 }
