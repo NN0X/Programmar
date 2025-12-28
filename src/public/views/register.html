@@ -4,13 +4,15 @@
                 <title>Programmar</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
                 <link rel="stylesheet" type="text/css" href="public/styles/login.css">
+                <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
                 <script src="public/scripts/register.js" defer></script>
         </head>
         <body>
                 <div id="toast-container"></div>
 
                 <form onsubmit="event.preventDefault(); register();">
-                         <div style="width: 50px; height: 50px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; margin: 0 auto 1rem auto; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                         <div class="form-logo">
+                                <?php include 'public/resources/logo.svg'; ?>
                         </div>
 
                         <h1>Create Account</h1>
