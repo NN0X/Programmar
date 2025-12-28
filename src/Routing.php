@@ -31,6 +31,14 @@ class Routing
                         "controller" => "CourseController",
                         "action" => "start"
                 ],
+                "lesson" => [
+                        "controller" => "CourseController",
+                        "action" => "lesson"
+                ],
+                "complete-lesson" => [
+                        "controller" => "CourseController",
+                        "action" => "completeLesson"
+                ],
                 "settings" => [
                         "controller" => "DashboardController",
                         "action" => "settings"

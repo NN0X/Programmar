@@ -82,4 +82,30 @@ class CourseRepository
                         $insert->execute([':uid' => $userId, ':cid' => $courseId]);
                 }
         }
+
+        public function getUserCourse(int $userId, int $courseId)
+        {
+                $stmt = $this->database->connect()->prepare('
+                        SELECT completed_lessons, last_accessed 
+                        FROM user_courses 
+                        WHERE user_id = :uid AND course_id = :cid
+                ');
+                $stmt->bindParam(':uid', $userId, PDO::PARAM_INT);
+                $stmt->bindParam(':cid', $courseId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function incrementProgress(int $userId, int $courseId)
+        {
+                $pdo = $this->database->connect();
+                $stmt = $pdo->prepare('
+                        UPDATE user_courses 
+                        SET completed_lessons = completed_lessons + 1,
+                            last_accessed = CURRENT_TIMESTAMP 
+                        WHERE user_id = :uid AND course_id = :cid
+                ');
+                $stmt->execute([':uid' => $userId, ':cid' => $courseId]);
+        }
 }

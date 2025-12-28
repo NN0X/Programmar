@@ -39,6 +39,7 @@ services:
       PG_HOST: db
     networks:
       - pg-network
+      - app-network
 
   pgadmin-programmar:
     image: dpage/pgadmin4:latest
