@@ -3,10 +3,12 @@
 class ContentService
 {
         private $apiUrl;
+        private $apiKey;
 
         public function __construct()
         {
-                $this->apiUrl = "http://content-service:8000"; 
+                $this->apiUrl = "http://content-service:8000";
+                $this->apiKey = getenv('CONTENT_SERVICE_KEY') ?: 'default_secret_key';
         }
 
         public function getCourseDetails(int $externalId)
@@ -17,6 +19,9 @@ class ContentService
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        'X-API-KEY: ' . $this->apiKey
+                ]);
 
                 $response = curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -37,6 +42,9 @@ class ContentService
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                        'X-API-KEY: ' . $this->apiKey
+                ]);
 
                 $response = curl_exec($ch);
                 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

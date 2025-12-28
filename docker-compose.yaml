@@ -35,6 +35,7 @@ services:
       PG_USER: ${PG_USER}
       PG_PASSWORD: ${PG_PASSWORD}
       PG_HOST: db
+      CONTENT_SERVICE_KEY: ${CONTENT_SERVICE_KEY}
     networks:
       - pg-network
       - app-network
@@ -52,6 +53,8 @@ services:
 
   content-service:
     build: ./ProgrammarContentService
+    environment:
+      CONTENT_SERVICE_KEY: ${CONTENT_SERVICE_KEY}
     volumes:
       - ./ProgrammarContentService/data:/app/data
     networks:

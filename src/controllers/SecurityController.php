@@ -99,8 +99,6 @@ class SecurityController extends AppController
                         return;
                 }
 
-                $this->validateCsrf();
-
                 $userId = $_SESSION['user']['id'];
                 $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
 
@@ -115,8 +113,6 @@ class SecurityController extends AppController
                         return;
                 }
 
-                $this->validateCsrf();
-
                 $userId = $_SESSION['user']['id'];
                 $this->userRepository->resetAccount($userId);
 
@@ -129,8 +125,6 @@ class SecurityController extends AppController
                         header("Location: /settings");
                         return;
                 }
-
-                $this->validateCsrf();
 
                 $userId = $_SESSION['user']['id'];
                 $this->userRepository->deleteUser($userId);

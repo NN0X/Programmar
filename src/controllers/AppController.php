@@ -4,6 +4,10 @@ class AppController
 {
         public function __construct()
         {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST')
+                {
+                        $this->validateCsrf();
+                }
         }
 
         protected function render(string $template = null, array $variables = [])
@@ -30,6 +34,14 @@ class AppController
 
         protected function validateCsrf()
         {
+                $publicActions = ["login", "register", "forgotPassword"];
+                $currentAction = explode('/', $_GET['action'] ?? '')[0];
+
+                if (in_array($currentAction, $publicActions))
+                {
+                        return;
+                }
+
                 $token = $_POST['csrf_token'] ?? '';
 
                 if (empty($token))

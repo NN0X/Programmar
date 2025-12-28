@@ -146,13 +146,11 @@ class CourseController extends AppController
         {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id']))
                 {
-                        $this->validateCsrf();
-
                         $courseId = (int)$_POST['course_id'];
                         $userId = $_SESSION['user']['id'];
 
                         $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
-                        
+
                         if (!$courseProgress || $courseProgress['current_lesson_status'] !== true)
                         {
                                 header("Location: /dashboard");
@@ -169,8 +167,6 @@ class CourseController extends AppController
 
         public function checkAnswer()
         {
-                $this->validateCsrf();
-
                 $input = json_decode(file_get_contents('php://input'), true);
                 if (!$input)
                 {
