@@ -112,7 +112,7 @@ class CourseController extends AppController
                         exit();
                 }
 
-                $courseId = $_GET['id'];
+                $courseId = (int)$_GET['id'];
                 $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
 
                 if (!$courseProgress)
@@ -146,6 +146,13 @@ class CourseController extends AppController
                         $courseId = $_POST['course_id'];
                         $userId = $_SESSION['user']['id'];
 
+                        $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
+                        if (!$courseProgress)
+                        {
+                                header("Location: /courses");
+                                exit();
+                        }
+
                         $this->courseRepository->incrementProgress($userId, $courseId);
 
                         header("Location: /lesson?id=" . $courseId);
@@ -157,7 +164,7 @@ class CourseController extends AppController
         public function deductRam()
         {
                 $input = json_decode(file_get_contents('php://input'), true);
-                
+
                 if (!$input) {
                     http_response_code(400);
                     echo json_encode(['error' => 'Invalid request']);

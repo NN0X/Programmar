@@ -29,7 +29,8 @@ class Database
                 }
                 catch(PDOException $e)
                 {
-                        die("Connection failed: " . $e->getMessage());
+                        error_log("Database Connection Error: " . $e->getMessage());
+                        die("A technical error occurred. Please try again later.");
                 }
         }
 }

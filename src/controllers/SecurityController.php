@@ -65,7 +65,7 @@ class SecurityController extends AppController
 
                 if (strlen($password) < 7)
                 {
-                        return $this->sendJson(['success' => false, 'message' => 'Password must be at least 12 characters long'], 400);
+                        return $this->sendJson(['success' => false, 'message' => 'Password must be at least 7 characters long'], 400);
                 }
                 if (!preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password))
                 {

@@ -65,6 +65,8 @@ class DashboardController extends AppController
                         return;
                 }
 
+                $this->validateCsrf();
+
                 $userId = $_SESSION['user']['id'];
                 $name = $_POST['name'];
 
@@ -78,6 +80,8 @@ class DashboardController extends AppController
                         header("Location: /settings");
                         return;
                 }
+
+                $this->validateCsrf();
 
                 $userId = $_SESSION['user']['id'];
                 $this->userRepository->resetAccount($userId);
