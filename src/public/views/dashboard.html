@@ -64,7 +64,11 @@
                                                                         </div>
                                                                 </div>
 
-                                                                <a href="/lesson?id=<?= $course['id']; ?>" class="btn-large" style="text-decoration:none; display:inline-block; text-align:center;">Continue Learning</a>
+                                                                <?php if ($ram > 0): ?>
+                                                                        <a href="/lesson?id=<?= $course['id']; ?>" class="btn-large" style="text-decoration:none; display:inline-block; text-align:center;">Continue Learning</a>
+                                                                <?php else: ?>
+                                                                        <button class="btn-large btn-disabled" disabled>Need RAM to Continue</button>
+                                                                <?php endif; ?>
                                                         </div>
 
                                                         <div class="progress-circle" style="--p:<?= $course['progress']; ?>">

@@ -69,7 +69,11 @@
                                                                         <div class="progress-fill" style="width: <?= $course['progress']; ?>%"></div>
                                                                 </div>
                                                         </div>
-                                                        <a href="/lesson?id=<?= $course['id']; ?>" class="btn-continue" style="text-decoration:none; display:block; text-align:center;">Continue</a>
+                                                        <?php if ($ram > 0): ?>
+                                                                <a href="/lesson?id=<?= $course['id']; ?>" class="btn-continue" style="text-decoration:none; display:block; text-align:center;">Continue</a>
+                                                        <?php else: ?>
+                                                                <button class="btn-continue btn-disabled" disabled>Low RAM</button>
+                                                        <?php endif; ?>
                                                 </div>
                                                 <?php endforeach; ?>
                                         <?php endif; ?>

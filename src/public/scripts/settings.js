@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', function()
         {
                 if (pendingForm)
                 {
+                        if (pendingForm === resetForm || pendingForm === deleteForm) {
+                                sessionStorage.clear();
+                        }
+
                         pendingForm.submit();
                 }
                 hideModal();

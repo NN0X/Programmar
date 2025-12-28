@@ -22,17 +22,37 @@ document.addEventListener('DOMContentLoaded', function()
         }
 });
 
+function showToast(message, type = 'success')
+{
+        let container = document.getElementById('toast-container');
+        if(!container) {
+             container = document.createElement('div');
+             container.id = 'toast-container';
+             document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerText = message;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease-in forwards';
+                toast.addEventListener('animationend', () => {
+                        toast.remove();
+                });
+        }, 3000);
+}
+
 function loadProgress() {
         if (!courseId) return;
-
+        
         const savedSlide = sessionStorage.getItem(`lesson_progress_${courseId}`);
-        if (savedSlide !== null)
-        {
+        if (savedSlide !== null) {
                 const index = parseInt(savedSlide, 10);
-                if (index >= 0 && index < totalSlides)
-                {
-                        for (let i = 0; i < index; i++)
-                        {
+                if (index >= 0 && index < totalSlides) {
+                        for (let i = 0; i < index; i++) {
                                 const dot = document.getElementById(`dot-${i}`);
                                 if (dot) dot.classList.add('completed');
                         }
@@ -41,8 +61,7 @@ function loadProgress() {
         }
 }
 
-function saveProgress(index)
-{
+function saveProgress(index) {
         if (!courseId) return;
         sessionStorage.setItem(`lesson_progress_${courseId}`, index);
 }
@@ -57,7 +76,7 @@ function updateUI()
         if (!slide) return;
 
         slide.classList.add('active');
-
+        
         document.querySelectorAll('.progress-dot').forEach((dot, index) => {
                 dot.classList.remove('active');
                 if (index === currentSlide) dot.classList.add('active');
@@ -67,8 +86,7 @@ function updateUI()
         const btn = document.getElementById('btn-action');
         const counter = document.getElementById('current-step');
 
-        if (counter)
-        {
+        if (counter) {
                 counter.innerText = currentSlide + 1;
         }
 
@@ -110,8 +128,7 @@ function handleAction()
 function goToNextSlide() 
 {
         const currentDot = document.getElementById(`dot-${currentSlide}`);
-        if(currentDot)
-        {
+        if(currentDot) {
                 currentDot.classList.remove('active');
                 currentDot.classList.add('completed');
         }
@@ -150,9 +167,7 @@ function checkQuiz(slideElement, index)
 
         if (!userAnswer) 
         {
-                feedback.className = "feedback-area incorrect";
-                feedback.innerText = "Please select or type an answer.";
-                feedback.style.display = "block";
+                showToast("Please select or type an answer.", "error");
                 return;
         }
 
@@ -168,7 +183,34 @@ function checkQuiz(slideElement, index)
         else 
         {
                 feedback.className = "feedback-area incorrect";
-                feedback.innerText = "Incorrect. Try again.";
+                feedback.innerText = "Incorrect. Try again. (-1 RAM)";
                 feedback.style.display = "block";
+                
+                fetch('/deduct-ram', {
+                        method: 'POST',
+                        headers: {
+                                'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ action: 'wrong_answer' })
+                })
+                .then(response => response.json())
+                .then(data => {
+                        if(data.success) {
+                                const ramDisplay = document.querySelector('.ram-count');
+                                if(ramDisplay) {
+                                        ramDisplay.innerText = data.ram + ' RAM';
+                                        ramDisplay.style.color = '#ef4444';
+                                        setTimeout(() => { ramDisplay.style.color = ''; }, 500);
+                                }
+                                
+                                if (data.ram <= 0) {
+                                    showToast("System Failure: 0 RAM. Recharge required.", "error");
+                                    setTimeout(() => {
+                                        window.location.href = "/dashboard";
+                                    }, 2000);
+                                }
+                        }
+                })
+                .catch(err => console.error("Error deducting RAM:", err));
         }
 }

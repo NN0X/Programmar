@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
         password VARCHAR(255) NOT NULL,
         name VARCHAR(100),
         ram INT DEFAULT 5,
+        last_ram_check TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

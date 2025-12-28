@@ -39,6 +39,10 @@ class Routing
                         "controller" => "CourseController",
                         "action" => "completeLesson"
                 ],
+                "deduct-ram" => [
+                        "controller" => "CourseController",
+                        "action" => "deductRam"
+                ],
                 "settings" => [
                         "controller" => "DashboardController",
                         "action" => "settings"

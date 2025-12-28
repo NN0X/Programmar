@@ -76,6 +76,12 @@ class CourseController extends AppController
 
         public function start()
         {
+                $user = $this->getUserData();
+                if ($user['ram'] <= 0) {
+                         header("Location: /dashboard");
+                         exit();
+                }
+
                 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']))
                 {
                         $courseId = $_POST['id'];
@@ -98,11 +104,15 @@ class CourseController extends AppController
                         exit();
                 }
 
-                $courseId = $_GET['id'];
                 $userId = $_SESSION['user']['id'];
-
                 $user = $this->userRepository->getUserById($userId);
 
+                if ($user['ram'] <= 0) {
+                        header("Location: /dashboard");
+                        exit();
+                }
+
+                $courseId = $_GET['id'];
                 $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
 
                 if (!$courseProgress)
@@ -142,5 +152,22 @@ class CourseController extends AppController
                         exit();
                 }
                 header("Location: /dashboard");
+        }
+
+        public function deductRam()
+        {
+                $input = json_decode(file_get_contents('php://input'), true);
+                
+                if (!$input) {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Invalid request']);
+                    return;
+                }
+
+                $userId = $_SESSION['user']['id'];
+                $newRam = $this->userRepository->deductRam($userId);
+
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'ram' => $newRam]);
         }
 }

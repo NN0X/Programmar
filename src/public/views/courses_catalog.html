@@ -69,10 +69,14 @@
 
                                                 <form action="/start-course" method="POST">
                                                         <input type="hidden" name="id" value="<?= $course['id'] ?>">
-                                                        <?php if($course['completed_lessons'] > 0): ?>
-                                                                <button type="submit" class="btn-continue">Continue</button>
+                                                        <?php if ($ram > 0): ?>
+                                                                <?php if($course['completed_lessons'] > 0): ?>
+                                                                        <button type="submit" class="btn-continue">Continue</button>
+                                                                <?php else: ?>
+                                                                        <button type="submit" class="btn-continue" style="background-color: var(--secondary);">Start Course</button>
+                                                                <?php endif; ?>
                                                         <?php else: ?>
-                                                                <button type="submit" class="btn-continue" style="background-color: var(--secondary);">Start Course</button>
+                                                                <button type="button" class="btn-continue btn-disabled" disabled>Insufficient RAM</button>
                                                         <?php endif; ?>
                                                 </form>
                                         </div>
