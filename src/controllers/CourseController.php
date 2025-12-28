@@ -76,7 +76,8 @@ class CourseController extends AppController
 
         public function start()
         {
-                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']))
+                {
                         $courseId = $_POST['id'];
                         $userId = $_SESSION['user']['id'];
 
@@ -87,5 +88,56 @@ class CourseController extends AppController
                 }
 
                 header("Location: /courses");
+        }
+
+        public function lesson()
+        {
+                if (!isset($_GET['id']))
+                {
+                        header("Location: /dashboard");
+                        exit();
+                }
+
+                $courseId = $_GET['id'];
+                $userId = $_SESSION['user']['id'];
+
+                $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
+
+                if (!$courseProgress)
+                {
+                        header("Location: /courses");
+                        exit();
+                }
+
+                $currentLessonNum = $courseProgress['completed_lessons'] + 1;
+                $lessonData = $this->contentService->getLesson($courseId, $currentLessonNum);
+
+                if (!$lessonData)
+                {
+                        header("Location: /dashboard");
+                        exit();
+                }
+
+                $this->courseRepository->setActiveCourse($userId, $courseId);
+
+                $this->render('lesson', [
+                        'lesson' => $lessonData,
+                        'lessonNumber' => $currentLessonNum
+                ]);
+        }
+
+        public function completeLesson()
+        {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id']))
+                {
+                        $courseId = $_POST['course_id'];
+                        $userId = $_SESSION['user']['id'];
+
+                        $this->courseRepository->incrementProgress($userId, $courseId);
+
+                        header("Location: /lesson?id=" . $courseId);
+                        exit();
+                }
+                header("Location: /dashboard");
         }
 }
