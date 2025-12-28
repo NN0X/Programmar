@@ -8,41 +8,43 @@ services:
     ports:
       - "127.0.0.1:9000:80"
     volumes:
-      - .:/app/
-    links:
-      - php
+      - .:/src/app/
     networks:
       - pg-network
-  
+
   db:
-    build:
-      context: .
-      dockerfile: docker/db/Dockerfile
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
     #ports:
       #- "9001:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
     networks:
       - pg-network
-  
+
   php:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
     volumes:
-      - .:/app
+      - .:/src/app
     networks:
       - pg-network
-  
+
   pgadmin-programmar:
     image: dpage/pgadmin4:latest
     container_name: pg-admin2
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
     ports:
       - "127.0.0.1:9002:80"
     networks:
       - pg-network
-  
+
 networks:
   pg-network:
 
