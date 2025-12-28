@@ -22,6 +22,17 @@ class UserRepository
                 return $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
+        public function getUserById(int $id)
+        {
+                $stmt = $this->database->connect()->prepare('
+                        SELECT * FROM users WHERE id = :id
+                ');
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+
         public function addUser(string $email, string $password)
         {
                 $stmt = $this->database->connect()->prepare('

@@ -4,48 +4,74 @@
                 <title>Programmar</title>
                 <link rel="stylesheet" type="text/css" href="public/styles/main.css">
                 <link rel="stylesheet" type="text/css" href="public/styles/dashboard.css">
-                <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
                 <script src="public/scripts/main.js" defer></script>
         </head>
         <body>
                 <div class="app-container">
                         <nav class="sidebar">
                                 <div class="logo">
-                                        <div class="logo-small">
-                                                <?php include 'public/resources/logo.svg'; ?>
-                                        </div>
-                                        Programmar
+                                        <a href="/dashboard" class="logo-link">
+                                                <div class="logo-small">
+                                                        <?php include 'public/resources/logo.svg'; ?>
+                                                </div>
+                                                Programmar
+                                        </a>
                                 </div>
+
                                 <ul class="nav-links">
-                                        <li><a href="#" class="active">Dashboard</a></li>
-                                        <li><a href="#">My Courses</a></li>
-                                        <li><a href="#">Challenges</a></li>
-                                        <li><a href="#">Settings</a></li>
+                                        <li><a href="/dashboard" class="active">Dashboard</a></li>
+                                        <li><a href="/courses">My Courses</a></li>
+                                        <li><a href="/settings">Settings</a></li>
                                 </ul>
                         </nav>
 
                         <main class="main-content">
                                 <header>
-                                        <h1>Keep going, <?= $username; ?>!</h1>
-                                        <p>Your coding journey is looking great. What's next?</p>
+                                        <div class="header-text">
+                                                <h1>Keep going, <?= htmlspecialchars($username); ?>!</h1>
+                                                <p>Your coding journey is looking great. What's next?</p>
+                                        </div>
+
+                                        <div class="ram-container">
+                                                <span class="ram-icon">⚡</span>
+                                                <span class="ram-count"><?= $ram; ?> RAM</span>
+                                        </div>
                                 </header>
 
                                 <div class="dashboard-grid">
-                                        <?php foreach ($courses as $course): ?>
-                                        <div class="card">
-                                                <div class="card-icon">
-                                                        <?= $course['icon']; ?>
+                                        <?php if (empty($courses)): ?>
+                                                <div class="empty-state">
+                                                        <p>You haven't started any courses yet.</p>
                                                 </div>
-                                                <div>
-                                                        <h3><?= $course['title']; ?></h3>
-                                                        <p><?= $course['description']; ?></p>
-                                                        <div class="progress-bar">
-                                                                <div class="progress-fill" style="width: <?= $course['progress']; ?>%"></div>
+                                        <?php else: ?>
+                                                <?php foreach ($courses as $course): ?>
+                                                <div class="card">
+                                                        <div class="card-header">
+                                                                <div class="card-icon">
+                                                                        <?php
+                                                                                $iconMap = [
+                                                                                        'terminal' => '💻',
+                                                                                        'server' => '⚙️',
+                                                                                        'database' => '🗄️',
+                                                                                        'code' => '📝'
+                                                                                ];
+                                                                                echo $iconMap[$course['icon']] ?? '📘';
+                                                                        ?>
+                                                                </div>
+                                                                <span class="lesson-count"><?= $course['completed_lessons'] ?>/<?= $course['total_lessons'] ?></span>
                                                         </div>
+
+                                                        <div class="card-body">
+                                                                <h3><?= htmlspecialchars($course['title']); ?></h3>
+                                                                <p><?= htmlspecialchars($course['description']); ?></p>
+                                                                <div class="progress-bar">
+                                                                        <div class="progress-fill" style="width: <?= $course['progress']; ?>%"></div>
+                                                                </div>
+                                                        </div>
+                                                        <button class="btn-continue">Continue</button>
                                                 </div>
-                                                <button>Continue Learning</button>
-                                        </div>
-                                        <?php endforeach; ?>
+                                                <?php endforeach; ?>
+                                        <?php endif; ?>
                                 </div>
                         </main>
                 </div>

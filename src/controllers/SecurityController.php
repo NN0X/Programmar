@@ -1,6 +1,6 @@
 <?php
 
-require_once "repository/UserRepository.php";
+require_once "repositories/UserRepository.php";
 require_once "AppController.php";
 
 class SecurityController extends AppController

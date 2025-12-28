@@ -2,10 +2,10 @@
 
 require_once "controllers/SecurityController.php";
 require_once "controllers/DashboardController.php";
+require_once "controllers/CourseController.php";
 
 class Routing
 {
-
         public static $routes = [
                 "login" => [
                         "controller" => "SecurityController",
@@ -18,6 +18,14 @@ class Routing
                 "dashboard" => [
                         "controller" => "DashboardController",
                         "action" => "index"
+                ],
+                "courses" => [
+                        "controller" => "CourseController",
+                        "action" => "index"
+                ],
+                "settings" => [
+                        "controller" => "DashboardController",
+                        "action" => "settings"
                 ]
         ];
 
