@@ -67,14 +67,17 @@ class CourseRepository
                 ');
                 $stmt->execute([':uid' => $userId, ':cid' => $courseId]);
 
-                if ($stmt->fetch()) {
+                if ($stmt->fetch())
+                {
                         $update = $pdo->prepare('
                                 UPDATE user_courses 
                                 SET last_accessed = CURRENT_TIMESTAMP 
                                 WHERE user_id = :uid AND course_id = :cid
                         ');
                         $update->execute([':uid' => $userId, ':cid' => $courseId]);
-                } else {
+                }
+                else
+                {
                         $insert = $pdo->prepare('
                                 INSERT INTO user_courses (user_id, course_id, last_accessed)
                                 VALUES (:uid, :cid, CURRENT_TIMESTAMP)
@@ -86,7 +89,7 @@ class CourseRepository
         public function getUserCourse(int $userId, int $courseId)
         {
                 $stmt = $this->database->connect()->prepare('
-                        SELECT completed_lessons, last_accessed 
+                        SELECT completed_lessons, current_lesson_status, last_accessed 
                         FROM user_courses 
                         WHERE user_id = :uid AND course_id = :cid
                 ');
@@ -97,12 +100,23 @@ class CourseRepository
                 return $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
+        public function setLessonPassed(int $userId, int $courseId)
+        {
+                $stmt = $this->database->connect()->prepare('
+                        UPDATE user_courses 
+                        SET current_lesson_status = TRUE 
+                        WHERE user_id = :uid AND course_id = :cid
+                ');
+                $stmt->execute([':uid' => $userId, ':cid' => $courseId]);
+        }
+
         public function incrementProgress(int $userId, int $courseId)
         {
                 $pdo = $this->database->connect();
                 $stmt = $pdo->prepare('
                         UPDATE user_courses 
                         SET completed_lessons = completed_lessons + 1,
+                            current_lesson_status = FALSE,
                             last_accessed = CURRENT_TIMESTAMP 
                         WHERE user_id = :uid AND course_id = :cid
                 ');

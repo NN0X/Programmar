@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS user_courses (
         user_id INT REFERENCES users(id) ON DELETE CASCADE,
         course_id INT REFERENCES courses(id) ON DELETE CASCADE,
         completed_lessons INT DEFAULT 0,
+        current_lesson_status BOOLEAN DEFAULT FALSE,
         last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id, course_id)
 );

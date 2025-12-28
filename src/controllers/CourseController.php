@@ -77,7 +77,8 @@ class CourseController extends AppController
         public function start()
         {
                 $user = $this->getUserData();
-                if ($user['ram'] <= 0) {
+                if ($user['ram'] <= 0)
+                {
                          header("Location: /dashboard");
                          exit();
                 }
@@ -107,7 +108,8 @@ class CourseController extends AppController
                 $userId = $_SESSION['user']['id'];
                 $user = $this->userRepository->getUserById($userId);
 
-                if ($user['ram'] <= 0) {
+                if ($user['ram'] <= 0)
+                {
                         header("Location: /dashboard");
                         exit();
                 }
@@ -149,16 +151,11 @@ class CourseController extends AppController
                         $courseId = (int)$_POST['course_id'];
                         $userId = $_SESSION['user']['id'];
 
-                        $lastCourse = $this->courseRepository->getLastAccessedCourse($userId);
-                        if (!$lastCourse || $lastCourse['id'] !== $courseId) {
-                                header("Location: /dashboard");
-                                exit();
-                        }
-
                         $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
-                        if (!$courseProgress)
+                        
+                        if (!$courseProgress || $courseProgress['current_lesson_status'] !== true)
                         {
-                                header("Location: /courses");
+                                header("Location: /dashboard");
                                 exit();
                         }
 
@@ -188,7 +185,8 @@ class CourseController extends AppController
                 $userId = $_SESSION['user']['id'];
                 $courseProgress = $this->courseRepository->getUserCourse($userId, $courseId);
 
-                if (!$courseProgress) {
+                if (!$courseProgress)
+                {
                         http_response_code(403);
                         return;
                 }
@@ -201,6 +199,12 @@ class CourseController extends AppController
                 header('Content-Type: application/json');
                 if ($correctAnswer && strtolower(trim($userAnswer)) === strtolower(trim($correctAnswer)))
                 {
+                        $totalSublessons = count($lessonData['sublessons']);
+                        if ($subIndex === $totalSublessons - 1)
+                        {
+                                $this->courseRepository->setLessonPassed($userId, $courseId);
+                        }
+
                         echo json_encode(['success' => true, 'correct' => true]);
                 }
                 else
