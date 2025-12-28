@@ -1,9 +1,17 @@
 <?php
 
+require_once "repository/UserRepository.php";
 require_once "AppController.php";
 
 class SecurityController extends AppController
 {
+        private $userRepository;
+
+        public function __construct()
+        {
+                $this->userRepository = new UserRepository();
+        }
+
         public function login()
         {
                 if (!$this->isPost())
@@ -17,19 +25,23 @@ class SecurityController extends AppController
                 $email = $data['email'] ?? '';
                 $password = $data['password'] ?? '';
 
-                $user = $this->getUser($email, $password);
+                $user = $this->userRepository->getUser($email);
 
-                if ($user)
-                {
-                        session_regenerate_id(true);
-                        $_SESSION['user']['id'] = $user;
-                        return $this->sendJson(['success' => true, 'message' => 'Login successful'], 200);
-                }
-                else
+                if (!$user)
                 {
                         return $this->sendJson(['success' => false, 'message' => 'Invalid credentials'], 401);
                 }
 
+                if (!password_verify($password, $user['password']))
+                {
+                        return $this->sendJson(['success' => false, 'message' => 'Invalid credentials'], 401);
+                }
+
+                session_regenerate_id(true);
+                $_SESSION['user']['id'] = $user['id'];
+                $_SESSION['user']['email'] = $user['email'];
+
+                return $this->sendJson(['success' => true, 'message' => 'Login successful'], 200);
         }
 
         public function register()
@@ -61,14 +73,15 @@ class SecurityController extends AppController
                         return $this->sendJson(['success' => false, 'message' => 'Passwords do not match'], 400);
                 }
 
-                $existingUser = $this->getUser($email, $password);
-                if ($existingUser)
+                if ($this->userRepository->getUser($email))
                 {
                         // TODO: should send email to ask for password reset on same email
                         return $this->sendJson(['success' => false, 'message' => 'Invalid credentials'], 400);
                 }
 
-                $this->saveUser($email, $password);
+                $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
+
+                $this->userRepository->addUser($email, $hashedPassword);
 
                 return $this->sendJson(['success' => true, 'message' => 'User registered successfully'], 201);
         }
@@ -80,31 +93,8 @@ class SecurityController extends AppController
                 echo json_encode($data);
         }
 
-        private function saveUser($email, $password)
-        {
-                // TODO: Save user to database
-                return true;
-        }
-
-        private function getUser(string $email, string $password): int|bool
-        {
-                $hashedPassword = $password; // TODO: hash and salt
-
-                // TODO: Replace with real database lookup
-                if ($email === 'nox@nox.pl' && $hashedPassword === 'admin')
-                {
-                        return rand(1, 1000);
-                }
-                else
-                {
-                        return false;
-                }
-        }
-
         private function isPost(): bool
         {
                 return $_SERVER['REQUEST_METHOD'] === 'POST';
         }
 }
-
-?>

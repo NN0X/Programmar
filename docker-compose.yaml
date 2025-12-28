@@ -8,7 +8,7 @@ services:
     ports:
       - "127.0.0.1:9000:80"
     volumes:
-      - .:/src/app/
+      - .:/app
     networks:
       - pg-network
 
@@ -22,6 +22,7 @@ services:
       #- "9001:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - pg-network
 
@@ -30,7 +31,12 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     volumes:
-      - .:/src/app
+      - .:/app
+    environment:
+      PG_DB: ${PG_DB}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_HOST: db
     networks:
       - pg-network
 
