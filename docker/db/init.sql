@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS user_courses (
         PRIMARY KEY (user_id, course_id)
 );
 
-INSERT INTO courses (title, description, icon) VALUES
+INSERT INTO courses (title, description, icon, is_visible) VALUES
 ('DEBUG', 'DEBUG', 'debug', FALSE),
 ('Sentino', 'Sentence, Tatuażyk, Król Sento, Sebastian Enrique Alvarez Pałucki, etc.', 'sentino', FALSE),
 ('Python', 'Start your journey with Python.', 'python'),
