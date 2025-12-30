@@ -26,14 +26,14 @@ CREATE TABLE IF NOT EXISTS user_courses (
         PRIMARY KEY (user_id, course_id)
 );
 
-INSERT INTO courses (title, description, icon) VALUES
+INSERT INTO courses (title, description, icon, is_visible) VALUES
 ('DEBUG', 'DEBUG', 'debug', FALSE),
 ('Sentino', 'Sentence, Tatuażyk, Król Sento, Sebastian Enrique Alvarez Pałucki, etc.', 'sentino', FALSE),
-('Python', 'Start your journey with Python.', 'python'),
+('Python', 'Start your journey with Python.', 'python', TRUE),
 ('JavaScript', 'Learn the language of the web.', 'javascript', FALSE),
 ('Java', 'Maybe build next Minecraft.', 'java', FALSE),
 ('C++', 'See why more is not always better.', 'cpp', FALSE),
-('C', 'Learn the best language there is.', 'c'),
+('C', 'Learn the best language there is.', 'c', TRUE),
 ('Go', 'Fast and efficient programming.', 'go', FALSE),
 ('Rust', 'Memory safety and performance.', 'rust', FALSE),
 ('Ruby', 'A programmer''s best friend.', 'ruby', FALSE),

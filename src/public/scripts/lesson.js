@@ -95,7 +95,7 @@ function updateUI()
                 counter.innerText = currentSlide + 1;
         }
 
-        if (type === 'info') 
+        if (type === 'info' || type === 'video')
         {
                 btn.innerText = (currentSlide === totalSlides - 1) ? "Finish Lesson" : "Continue";
                 btn.classList.remove('btn-check'); 
