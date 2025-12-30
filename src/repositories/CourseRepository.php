@@ -34,6 +34,7 @@ class CourseRepository
                                COALESCE(uc.completed_lessons, 0) as completed_lessons
                         FROM courses c
                         LEFT JOIN user_courses uc ON c.id = uc.course_id AND uc.user_id = :id
+                        WHERE c.is_visible = TRUE
                         ORDER BY c.title ASC
                 ');
                 $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
@@ -121,5 +122,15 @@ class CourseRepository
                         WHERE user_id = :uid AND course_id = :cid
                 ');
                 $stmt->execute([':uid' => $userId, ':cid' => $courseId]);
+        }
+
+        public function isCourseVisible(int $courseId): bool
+        {
+                $stmt = $this->database->connect()->prepare('
+                        SELECT is_visible FROM courses WHERE id = :id
+                ');
+                $stmt->bindParam(':id', $courseId, PDO::PARAM_INT);
+                $stmt->execute();
+                return (bool) $stmt->fetchColumn();
         }
 }

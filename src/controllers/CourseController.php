@@ -88,6 +88,12 @@ class CourseController extends AppController
                         $courseId = $_POST['id'];
                         $userId = $_SESSION['user']['id'];
 
+                        if (!$this->courseRepository->isCourseVisible($courseId))
+                        {
+                                header("Location: /courses");
+                                exit();
+                        }
+
                         $this->courseRepository->setActiveCourse($userId, $courseId);
 
                         header("Location: /dashboard");
