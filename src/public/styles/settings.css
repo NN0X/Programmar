@@ -63,7 +63,6 @@
         font-weight: 500;
 }
 
-/* Dark Input Styling */
 .form-group input {
         width: 100%;
         box-sizing: border-box;
@@ -103,7 +102,6 @@ button:hover {
         filter: brightness(110%);
 }
 
-/* Specific Button Colors */
 .btn-save {
         background-color: var(--primary);
         color: white;
@@ -147,7 +145,6 @@ button:hover {
         text-decoration: none;
 }
 
-/* Modal Styles */
 .modal-overlay {
         position: fixed;
         top: 0;
