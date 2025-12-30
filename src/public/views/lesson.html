@@ -70,9 +70,21 @@
                                                         <div class="slide-content-area">
                                                                 <?php if ($sub['type'] === 'info'): ?>
                                                                         <p class="lesson-text"><?= nl2br(htmlspecialchars($sub['content'])) ?></p>
+                                                                <?php elseif ($sub['type'] === 'embed'): ?>
+                                                                        <div class="video-container">
+                                                                                <iframe 
+                                                                                        data-src="<?= htmlspecialchars($sub['url']) ?>" 
+                                                                                        src="" 
+                                                                                        allowfullscreen>
+                                                                                </iframe>
+                                                                        </div>
                                                                 <?php elseif ($sub['type'] === 'video'): ?>
                                                                         <div class="video-container">
-                                                                                <iframe src="<?= htmlspecialchars($sub['url']) ?>" allowfullscreen></iframe>
+                                                                                <video 
+                                                                                        data-src="<?= htmlspecialchars($sub['url']) ?>" 
+                                                                                        controls 
+                                                                                        playsinline>
+                                                                                </video>
                                                                         </div>
                                                                 <?php else: ?>
                                                                         <p class="question-text"><?= htmlspecialchars($sub['question']) ?></p>
