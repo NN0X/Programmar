@@ -72,19 +72,92 @@ function saveProgress(index)
 
 function updateUI() 
 {
-        document.querySelectorAll('.sublesson-slide').forEach(slide => {
-                slide.classList.remove('active');
+        document.querySelectorAll('.sublesson-slide').forEach((slide, index) => {
+                const iframe = slide.querySelector('iframe');
+                const video = slide.querySelector('video');
+                const media = iframe || video;
+        
+                if (index === currentSlide)
+                {
+                        slide.classList.add('active');
+
+                        if (media && media.dataset.src)
+                        {
+                                if (media.tagName === 'IFRAME')
+                                {
+                                        let url = media.dataset.src;
+                                        const separator = url.includes('?') ? '&' : '?';
+                                        const playUrl = `${url}${separator}autoplay=1`;
+
+                                        if (media.getAttribute('src') !== playUrl)
+                                        {
+                                                media.setAttribute('src', playUrl);
+                                                media.onload = function() {
+                                                        try
+                                                        {
+                                                                const innerDoc = media.contentWindow || media.contentDocument;
+                                                                const innerVideo = innerDoc.querySelector('video');
+                                                                if (innerVideo)
+                                                                {
+                                                                        innerVideo.volume = 0.3;
+                                                                }
+                                                        }
+                                                        catch (e)
+                                                        {
+                                                                console.log("Cannot access iframe content due to cross-origin policy.");
+                                                        }
+                                                };
+                                        }
+                                }
+                                else if (media.tagName === 'VIDEO')
+                                {
+                                        if (media.getAttribute('src') !== media.dataset.src)
+                                        {
+                                                media.setAttribute('src', media.dataset.src);
+
+                                                media.volume = 0.3;
+                                                media.muted = false;
+
+                                                const playPromise = media.play();
+
+                                                if (playPromise !== undefined)
+                                                {
+                                                        playPromise.catch(error => {
+                                                                console.log("Autoplay with sound blocked. Fallback to muted.");
+                                                                media.muted = true;
+                                                                media.play();
+                                                        });
+                                                }
+                                        }
+                                }
+                        }
+                }
+                else
+                {
+                        slide.classList.remove('active');
+
+                        if (media)
+                        {
+                                media.removeAttribute('src');
+                                if (media.tagName === 'VIDEO')
+                                {
+                                        media.load();
+                                }
+                                else
+                                {
+                                        media.onload = null;
+                                }
+                        }
+                }
         });
-
-        const slide = document.getElementById(`slide-${currentSlide}`);
-        if (!slide) return;
-
-        slide.classList.add('active');
 
         document.querySelectorAll('.progress-dot').forEach((dot, index) => {
                 dot.classList.remove('active');
                 if (index === currentSlide) dot.classList.add('active');
         });
+
+        const slide = document.getElementById(`slide-${currentSlide}`);
+        if (!slide) return;
 
         const type = slide.dataset.type;
         const btn = document.getElementById('btn-action');
@@ -95,12 +168,12 @@ function updateUI()
                 counter.innerText = currentSlide + 1;
         }
 
-        if (type === 'info' || type === 'video')
+        if (type === 'info' || type === 'video' || type === 'embed')
         {
                 btn.innerText = (currentSlide === totalSlides - 1) ? "Finish Lesson" : "Continue";
                 btn.classList.remove('btn-check'); 
         } 
-        else 
+        else
         {
                 btn.innerText = "Check Answer";
                 btn.classList.add('btn-check');
