@@ -30,7 +30,9 @@ class Database
                 catch(PDOException $e)
                 {
                         error_log("Database Connection Error: " . $e->getMessage());
-                        die("A technical error occurred. Please try again later.");
+                        http_response_code(500);
+                        include __DIR__ . '/public/views/500.php';
+                        exit();
                 }
         }
 }
