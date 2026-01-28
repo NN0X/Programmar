@@ -147,6 +147,10 @@ button:disabled {
     font-size: 0.9rem;
 }
 
+.toast.hiding {
+    animation: fadeOut 0.3s ease-in forwards;
+}
+
 .toast.success { border-left: 4px solid #10b981; }
 .toast.error { border-left: 4px solid #ef4444; }
 

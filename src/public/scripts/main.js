@@ -1,7 +1,7 @@
 function showToast(message, type = 'success')
 {
         let container = document.getElementById('toast-container');
-        if(!container) {
+        if (!container) {
              container = document.createElement('div');
              container.id = 'toast-container';
              document.body.appendChild(container);
@@ -14,9 +14,16 @@ function showToast(message, type = 'success')
         container.appendChild(toast);
 
         setTimeout(() => {
-                toast.style.animation = 'fadeOut 0.3s ease-in forwards';
+                toast.classList.add('hiding');
+
                 toast.addEventListener('animationend', () => {
                         toast.remove();
                 });
+
+                setTimeout(() => {
+                        if (toast.parentElement) {
+                                toast.remove();
+                        }
+                }, 500);
         }, 3000);
 }
