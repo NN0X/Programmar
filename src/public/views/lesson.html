@@ -1,52 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Lesson <?= $lessonNumber ?></title>
-        <link rel="stylesheet" href="public/styles/main.css">
-        <link rel="stylesheet" href="public/styles/dashboard.css">
-        <link rel="stylesheet" href="public/styles/lesson.css">
-        <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
-        <script src="public/scripts/lesson.js" defer></script>
-</head>
+        <?php 
+                $pageTitle = 'Lesson ' . $lessonNumber;
+                $currentPage = 'my_courses'; // To keep My Courses active in sidebar
+                $extraStyles = '<link rel="stylesheet" href="public/styles/lesson.css">';
+                $extraScripts = '<script src="public/scripts/lesson.js" defer></script>';
+                include 'partials/header.php'; 
+        ?>
 <body>
         <div class="app-container">
-                <nav class="sidebar">
-                        <div class="logo">
-                                <a href="/dashboard" class="logo-link">
-                                        <div class="logo-small">
-                                                <?php include 'public/resources/logo.svg'; ?>
-                                        </div>
-                                        Programmar
-                                </a>
-                        </div>
-
-                        <ul class="nav-links">
-                                <li><a href="/dashboard">Dashboard</a></li>
-                                <li><a href="/my-courses" class="active">My Courses</a></li>
-                                <li><a href="/courses">Courses</a></li>
-                                <li><a href="/settings">Settings</a></li>
-                        </ul>
-
-                        <div class="sidebar-footer">
-                                <a href="/logout" class="logout-link">
-                                        Logout
-                                </a>
-                        </div>
-                </nav>
+                <?php include 'partials/sidebar.php'; ?>
 
                 <main class="main-content lesson-main">
                         <header>
                                 <div class="header-text">
                                         <a href="/dashboard" class="back-link">← Back to Dashboard</a>
                                         <h1><?= htmlspecialchars($lesson['title']) ?></h1>
-                                        
+
                                         <div class="lesson-meta" style="margin-top: 10px;">
                                                 <span class="lesson-badge">Lesson <?= $lessonNumber ?></span>
                                         </div>
                                 </div>
-                                
+
                                 <div class="ram-container">
                                         <span class="ram-icon">⚡</span>
                                         <span class="ram-count"><?= $ram; ?> RAM</span>

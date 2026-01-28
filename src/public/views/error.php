@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+        <head>
+                <title>Programmar - Error</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" type="text/css" href="/public/styles/main.css">
+                <link rel="icon" type="image/svg+xml" href="/public/resources/logo.svg">
+        </head>
+        <body>
+                <h1><?= $errorCode ?></h1>
+                <p><?= $errorMessage ?></p>
+                <a href="/dashboard">Go back to Dashboard</a>
+        </body>
+</html>

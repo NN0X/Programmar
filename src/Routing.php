@@ -86,7 +86,9 @@ class Routing
                         $controllerObj->$method();
                 } else {
                         http_response_code(404);
-                        include 'public/views/404.html';
+                        $errorCode = 404;
+                        $errorMessage = "Page Not Found";
+                        include 'public/views/error.php';
                 }
         }
 

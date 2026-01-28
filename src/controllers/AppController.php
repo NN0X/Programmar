@@ -13,7 +13,7 @@ class AppController
         protected function render(string $template = null, array $variables = [])
         {
                 $templatePath = 'public/views/'. $template.'.html';
-                $templatePath404 = 'public/views/404.html';
+                $errorPath = 'public/views/error.php';
                 $output = "";
 
                 if(file_exists($templatePath))
@@ -26,7 +26,9 @@ class AppController
                 else
                 {
                         ob_start();
-                        include $templatePath404;
+                        $errorCode = 404;
+                        $errorMessage = "Page Not Found";
+                        include $errorPath;
                         $output = ob_get_clean();
                 }
                 echo $output;
@@ -53,10 +55,11 @@ class AppController
                 if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token))
                 {
                         http_response_code(403);
-                        include 'public/views/403.html';
+                        $errorCode = 403;
+                        $errorMessage = "Forbidden";
+                        include 'public/views/error.php';
                         exit();
                 }
         }
 }
-
 ?>

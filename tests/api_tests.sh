@@ -3,7 +3,7 @@
 API_URL="http://localhost:9000"
 GREEN='\033[0;32m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 print_status() {
     local endpoint=$1
@@ -18,7 +18,7 @@ print_status() {
     fi
 }
 
-echo "--- Starting Integration Tests for $API_URL ---"
+echo "Starting Integration Tests for $API_URL"
 
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "$API_URL/")
 if [[ "$CODE" == "200" || "$CODE" == "302" ]]; then

@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Settings - Coder</title>
-        <link rel="stylesheet" href="public/styles/main.css">
-        <link rel="stylesheet" href="public/styles/settings.css">
-        <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
-        <script src="public/scripts/settings.js" defer></script>
-</head>
+        <?php 
+                $pageTitle = 'Settings - Coder';
+                $currentPage = 'settings';
+                $extraStyles = '<link rel="stylesheet" href="public/styles/settings.css">';
+                $extraScripts = '<script src="public/scripts/settings.js" defer></script>';
+                include 'partials/header.php'; 
+        ?>
 <body>
         <div class="settings-container">
                 <a href="/dashboard" class="back-link">

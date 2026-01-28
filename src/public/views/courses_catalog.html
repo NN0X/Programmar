@@ -1,38 +1,13 @@
 <!doctype html>
 <html>
-        <head>
-                <title>Programmar - Catalog</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link rel="stylesheet" type="text/css" href="public/styles/main.css">
-                <link rel="stylesheet" type="text/css" href="public/styles/dashboard.css">
-                <link rel="icon" type="image/svg+xml" href="public/resources/logo.svg">
-                <script src="public/scripts/main.js" defer></script>
-        </head>
+        <?php 
+                $pageTitle = 'Programmar - Catalog';
+                $currentPage = 'courses';
+                include 'partials/header.php'; 
+        ?>
         <body>
                 <div class="app-container">
-                        <nav class="sidebar">
-                                <div class="logo">
-                                        <a href="/dashboard" class="logo-link">
-                                                <div class="logo-small">
-                                                        <?php include 'public/resources/logo.svg'; ?>
-                                                </div>
-                                                Programmar
-                                        </a>
-                                </div>
-
-                                <ul class="nav-links">
-                                        <li><a href="/dashboard">Dashboard</a></li>
-                                        <li><a href="/my-courses">My Courses</a></li>
-                                        <li><a href="/courses" class="active">Courses</a></li>
-                                        <li><a href="/settings">Settings</a></li>
-                                </ul>
-
-                                <div class="sidebar-footer">
-                                        <a href="/logout" class="logout-link">
-                                                Logout
-                                        </a>
-                                </div>
-                        </nav>
+                        <?php include 'partials/sidebar.php'; ?>
 
                         <main class="main-content">
                                 <header>

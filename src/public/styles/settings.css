@@ -130,21 +130,6 @@ button:hover {
         color: white;
 }
 
-.back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 2rem;
-        color: var(--text-gray);
-        font-size: 0.9rem;
-        transition: color 0.2s;
-}
-
-.back-link:hover {
-        color: var(--text-white);
-        text-decoration: none;
-}
-
 .modal-overlay {
         position: fixed;
         top: 0;

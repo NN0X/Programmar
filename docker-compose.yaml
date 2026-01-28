@@ -36,6 +36,7 @@ services:
       PG_PASSWORD: ${PG_PASSWORD}
       PG_HOST: db
       CONTENT_SERVICE_KEY: ${CONTENT_SERVICE_KEY}
+      CONTENT_SERVICE_URL: http://content-service:8000
     networks:
       - pg-network
       - app-network
