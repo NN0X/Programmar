@@ -29,6 +29,8 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
     && docker-php-ext-install -j "$(nproc)" $PHP_EXTENSIONS \
     && apk del .build-deps
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
 
 RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
