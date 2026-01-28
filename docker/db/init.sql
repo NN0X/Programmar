@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS courses (
         id SERIAL PRIMARY KEY,
-        title VARCHAR(100) NOT NULL,
+        title VARCHAR(100) NOT NULL UNIQUE,
         description TEXT,
         icon VARCHAR(50) DEFAULT 'code',
         is_visible BOOLEAN DEFAULT TRUE,

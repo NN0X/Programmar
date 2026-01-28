@@ -9,6 +9,7 @@ class SecurityController extends AppController
 
         public function __construct()
         {
+                parent::__construct();
                 $this->userRepository = new UserRepository();
         }
 
@@ -100,7 +101,7 @@ class SecurityController extends AppController
                 }
 
                 $userId = $_SESSION['user']['id'];
-                $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+                $name = $_POST['name'] ?? '';
 
                 $this->userRepository->updateName($userId, $name);
                 header("Location: /settings");

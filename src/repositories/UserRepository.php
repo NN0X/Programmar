@@ -107,14 +107,16 @@ class UserRepository
                 $diff = $now->diff($lastCheckDate);
                 $hoursPassed = $diff->h + ($diff->days * 24);
 
-                if ($hoursPassed >= 1 && $user['ram'] < 5) {
+                if ($hoursPassed >= 1 && $user['ram'] < 5)
+                {
+                        $hoursToAdd = min(5 - $user['ram'], $hoursPassed);
                         $stmt = $pdo->prepare('
-                                UPDATE users 
-                                SET ram = LEAST(5, ram + :hours),
-                                    last_ram_check = CURRENT_TIMESTAMP
+                                UPDATE users
+                                SET ram = ram + :hours,
+                                        last_ram_check = last_ram_check + interval \':hours hours\' -- Add specific hours instead of resetting to "now"
                                 WHERE id = :id
                         ');
-                        $stmt->execute([':hours' => $hoursPassed, ':id' => $userId]);
+                        $stmt->execute([':hours' => $hoursToAdd, ':id' => $userId]);
                 }
         }
 }
