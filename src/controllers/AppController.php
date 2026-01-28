@@ -2,6 +2,8 @@
 
 class AppController
 {
+        protected $jsonInput;
+
         public function __construct()
         {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST')
@@ -51,8 +53,8 @@ class AppController
 
                 if (empty($token))
                 {
-                        $jsonInput = json_decode(file_get_contents('php://input'), true);
-                        $token = $jsonInput['csrf_token'] ?? '';
+                        $this->jsonInput = json_decode(file_get_contents('php://input'), true);
+                        $token = $this->jsonInput['csrf_token'] ?? '';
                 }
 
                 if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token))

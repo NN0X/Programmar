@@ -225,7 +225,7 @@ function checkQuiz(slideElement, index)
                 },
                 body: JSON.stringify({
                         course_id: courseId,
-                        lesson_num: document.querySelector('.lesson-badge').innerText.match(/\d+/)[0],
+                        lesson_num: document.querySelector('.lesson-badge').dataset.lessonNum,
                         sublesson_index: index,
                         answer: userAnswer,
                         csrf_token: csrfToken

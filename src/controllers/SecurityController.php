@@ -20,7 +20,7 @@ class SecurityController extends AppController
                         return $this->render("login");
                 }
 
-                $content = trim(file_get_contents("php://input"));
+                $content = trim($this->jsonInput);
                 $data = json_decode($content, true);
 
                 $email = $data['email'] ?? '';

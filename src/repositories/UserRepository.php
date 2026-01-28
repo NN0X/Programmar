@@ -112,8 +112,7 @@ class UserRepository
                         $hoursToAdd = min(5 - $user['ram'], $hoursPassed);
                         $stmt = $pdo->prepare('
                                         UPDATE users
-                                        SET ram = ram + :hours,
-                                                last_ram_check = last_ram_check + (:hours || \' hours\')::interval
+                                        SET ram = SET ram = ram + :hours, last_ram_check = CURRENT_TIMESTAMP
                                         WHERE id = :id
                                 ');
                         $stmt->execute([':hours' => $hoursToAdd, ':id' => $userId]);

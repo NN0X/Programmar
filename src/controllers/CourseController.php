@@ -173,7 +173,7 @@ class CourseController extends AppController
 
         public function checkAnswer()
         {
-                $input = json_decode(file_get_contents('php://input'), true);
+                $input = json_decode($this->jsonInput);
                 if (!$input)
                 {
                         http_response_code(400);

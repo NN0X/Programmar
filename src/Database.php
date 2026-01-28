@@ -31,7 +31,7 @@ class Database
                 {
                         error_log("Database Connection Error: " . $e->getMessage());
                         http_response_code(500);
-                        include __DIR__ . '/public/views/500.php';
+                        include __DIR__ . '/public/views/500.html';
                         exit();
                 }
         }
