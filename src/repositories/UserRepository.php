@@ -111,11 +111,11 @@ class UserRepository
                 {
                         $hoursToAdd = min(5 - $user['ram'], $hoursPassed);
                         $stmt = $pdo->prepare('
-                                UPDATE users
-                                SET ram = ram + :hours,
-                                        last_ram_check = last_ram_check + interval \':hours hours\' -- Add specific hours instead of resetting to "now"
-                                WHERE id = :id
-                        ');
+                                        UPDATE users
+                                        SET ram = ram + :hours,
+                                                last_ram_check = last_ram_check + (:hours || \' hours\')::interval
+                                        WHERE id = :id
+                                ');
                         $stmt->execute([':hours' => $hoursToAdd, ':id' => $userId]);
                 }
         }
