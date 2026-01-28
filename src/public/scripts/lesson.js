@@ -2,25 +2,22 @@ let currentSlide = 0;
 let totalSlides = 0;
 let courseId = null;
 
-document.addEventListener('DOMContentLoaded', function() 
-{
-        const urlParams = new URLSearchParams(window.location.search);
-        courseId = urlParams.get('id');
+const urlParams = new URLSearchParams(window.location.search);
+courseId = urlParams.get('id');
 
-        const container = document.querySelector('.lesson-container');
-        if (container) {
-                totalSlides = parseInt(container.dataset.totalSlides, 10);
-        }
+const container = document.querySelector('.lesson-container');
+if (container) {
+        totalSlides = parseInt(container.dataset.totalSlides, 10);
+}
 
-        loadProgress();
+loadProgress();
 
-        updateUI();
+updateUI();
 
-        const btn = document.getElementById('btn-action');
-        if (btn) {
-                btn.addEventListener('click', handleAction);
-        }
-});
+const btn = document.getElementById('btn-action');
+if (btn) {
+        btn.addEventListener('click', handleAction);
+}
 
 function showToast(message, type = 'success')
 {
