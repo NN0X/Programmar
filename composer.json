@@ -1,0 +1,13 @@
+{
+    "name": "nox/programmar",
+    "description": "Programmar web application",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

@@ -2,12 +2,17 @@
 
 class AppController
 {
-        protected $jsonInput;
+        protected $jsonInput = [];
 
         public function __construct()
         {
                 if ($_SERVER['REQUEST_METHOD'] === 'POST')
                 {
+                        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+                        if (str_contains($contentType, 'application/json'))
+                        {
+                                $this->jsonInput = json_decode(file_get_contents('php://input'), true) ?? [];
+                        }
                         $this->validateCsrf();
                 }
         }
@@ -49,13 +54,8 @@ class AppController
                         return;
                 }
 
-                $token = $_POST['csrf_token'] ?? '';
+                $token = $_POST['csrf_token'] ?? $this->jsonInput['csrf_token'] ?? '';
 
-                if (empty($token))
-                {
-                        $this->jsonInput = json_decode(file_get_contents('php://input'), true);
-                        $token = $this->jsonInput['csrf_token'] ?? '';
-                }
 
                 if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $token))
                 {

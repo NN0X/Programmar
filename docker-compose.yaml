@@ -11,6 +11,11 @@ services:
       - .:/app
     networks:
       - pg-network
+    depends_on:
+      php:
+        condition: service_started
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:15-alpine
@@ -23,6 +28,11 @@ services:
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - pg-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   php:
     build:
@@ -40,6 +50,9 @@ services:
     networks:
       - pg-network
       - app-network
+    depends_on:
+      db:
+        condition: service_healthy
 
   pgadmin-programmar:
     image: dpage/pgadmin4:latest
