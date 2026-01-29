@@ -109,11 +109,13 @@ class UserRepository
                 if ($hoursPassed >= 1)
                 {
                         $hoursToAdd = min(5 - $user['ram'], $hoursPassed);
+
                         $stmt = $pdo->prepare('
                                         UPDATE users
-                                        SET ram = ram + :hours, last_ram_check = last_ram_check + INTERVAL :interval_str
+                                        SET ram = ram + :hours, last_ram_check = last_ram_check + CAST(:interval_str AS INTERVAL)
                                         WHERE id = :id
                                 ');
+
                         $stmt->execute([
                                 ':hours' => $hoursToAdd, 
                                 ':interval_str' => "$hoursToAdd hours",
