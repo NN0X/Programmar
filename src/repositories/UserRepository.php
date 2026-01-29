@@ -104,23 +104,34 @@ class UserRepository
                 $lastCheckDate = new DateTime($user['last_ram_check']);
                 $now = new DateTime();
                 $diff = $now->diff($lastCheckDate);
+
                 $hoursPassed = $diff->h + ($diff->days * 24);
 
                 if ($hoursPassed >= 1)
                 {
-                        $hoursToAdd = min(5 - $user['ram'], $hoursPassed);
-
-                        $stmt = $pdo->prepare('
-                                        UPDATE users
-                                        SET ram = ram + :hours, last_ram_check = last_ram_check + CAST(:interval_str AS INTERVAL)
+                        if ($user['ram'] + $hoursPassed >= 5)
+                        {
+                                $stmt = $pdo->prepare('
+                                        UPDATE users 
+                                        SET ram = 5, last_ram_check = CURRENT_TIMESTAMP 
                                         WHERE id = :id
                                 ');
-
-                        $stmt->execute([
-                                ':hours' => $hoursToAdd, 
-                                ':interval_str' => "$hoursToAdd hours",
-                                ':id' => $userId
-                        ]);
+                                $stmt->execute([':id' => $userId]);
+                        }
+                        else
+                        {
+                                $stmt = $pdo->prepare('
+                                        UPDATE users
+                                        SET ram = ram + :hours, 
+                                            last_ram_check = last_ram_check + CAST(:interval_str AS INTERVAL)
+                                        WHERE id = :id
+                                ');
+                                $stmt->execute([
+                                        ':hours' => $hoursPassed, 
+                                        ':interval_str' => "$hoursPassed hours",
+                                        ':id' => $userId
+                                ]);
+                        }
                 }
         }
 }
