@@ -1,6 +1,6 @@
 FROM php:8.3-fpm-alpine
 
-WORKDIR /src/app
+WORKDIR /app
 
 ENV RUN_DEPS \
     zlib \
@@ -34,7 +34,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
 
 RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
-
-COPY . /src/app
+COPY . /app
 
 RUN composer install --no-interaction --optimize-autoloader

@@ -43,7 +43,7 @@ class AppController
 
         protected function validateCsrf()
         {
-                $publicActions = ["login", "register", "forgotPassword"];
+                $publicActions = ["forgotPassword"];
 
                 $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
                 $currentAction = explode('/', $path)[0];

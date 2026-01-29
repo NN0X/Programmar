@@ -2,6 +2,7 @@ function login()
 {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const csrfToken = document.getElementById('csrf_token').value;
         const button = document.querySelector('button[type="submit"]');
 
         button.disabled = true;
@@ -10,7 +11,7 @@ function login()
         const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-                body: JSON.stringify({ email: email, password: password })
+                body: JSON.stringify({ email: email, password: password, csrf_token: csrfToken })
         };
 
         fetch('/login', requestOptions)

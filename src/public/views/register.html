@@ -13,6 +13,7 @@
                 <div id="toast-container"></div>
 
                 <form onsubmit="event.preventDefault(); register();">
+                        <input type="hidden" id="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                          <div class="form-logo">
                                 <?php include 'public/resources/logo.svg'; ?>
                         </div>

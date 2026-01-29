@@ -95,27 +95,30 @@ class UserRepository
         private function updatePassiveRam(int $userId)
         {
                 $pdo = $this->database->connect();
-
                 $stmt = $pdo->prepare('SELECT last_ram_check, ram FROM users WHERE id = :id');
                 $stmt->execute([':id' => $userId]);
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if (!$user || !$user['last_ram_check']) return;
+                if (!$user || !$user['last_ram_check'] || $user['ram'] >= 5) return;
 
                 $lastCheckDate = new DateTime($user['last_ram_check']);
                 $now = new DateTime();
                 $diff = $now->diff($lastCheckDate);
                 $hoursPassed = $diff->h + ($diff->days * 24);
 
-                if ($hoursPassed >= 1 && $user['ram'] < 5)
+                if ($hoursPassed >= 1)
                 {
                         $hoursToAdd = min(5 - $user['ram'], $hoursPassed);
                         $stmt = $pdo->prepare('
                                         UPDATE users
-                                        SET ram = ram + :hours, last_ram_check = CURRENT_TIMESTAMP
+                                        SET ram = ram + :hours, last_ram_check = last_ram_check + INTERVAL :interval_str
                                         WHERE id = :id
                                 ');
-                        $stmt->execute([':hours' => $hoursToAdd, ':id' => $userId]);
+                        $stmt->execute([
+                                ':hours' => $hoursToAdd, 
+                                ':interval_str' => "$hoursToAdd hours",
+                                ':id' => $userId
+                        ]);
                 }
         }
 }

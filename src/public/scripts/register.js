@@ -3,6 +3,7 @@ function register()
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const confirmedPassword = document.getElementById('confirmedPassword').value;
+        const csrfToken = document.getElementById('csrf_token').value;
         const button = document.querySelector('button[type="submit"]');
 
         if (password !== confirmedPassword) {
@@ -19,7 +20,8 @@ function register()
                 body: JSON.stringify({
                         email: email,
                         password: password,
-                        confirmedPassword: confirmedPassword 
+                        confirmedPassword: confirmedPassword,
+                        csrf_token: csrfToken
                 })
         };
 
